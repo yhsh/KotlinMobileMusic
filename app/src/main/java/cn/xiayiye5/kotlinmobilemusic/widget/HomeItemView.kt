@@ -5,8 +5,8 @@ import android.util.AttributeSet
 import android.view.View
 import android.widget.RelativeLayout
 import cn.xiayiye5.kotlinmobilemusic.R
-import cn.xiayiye5.kotlinmobilemusic.adapter.HomeAdapter
-import kotlinx.android.synthetic.main.fragment_home.view.*
+import cn.xiayiye5.kotlinmobilemusic.module.HomeItemBean
+import kotlinx.android.synthetic.main.item_home.view.*
 
 /*
  * Copyright (c) 2019, smuyyh@gmail.com All Rights Reserved.
@@ -45,6 +45,11 @@ import kotlinx.android.synthetic.main.fragment_home.view.*
  * 项目包名：cn.xiayiye5.kotlinmobilemusic.widget
  */
 class HomeItemView : RelativeLayout {
+    fun setData(data: HomeItemBean) {
+        tittle.text = data.title
+        des.text = data.description
+    }
+
     constructor(context: Context?) : super(context)
     constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs)
     constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int) : super(

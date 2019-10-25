@@ -83,6 +83,10 @@ abstract class BaseFragment : Fragment(), AnkoLogger {
      * 在所有fragment中的主子线程显示toast的方法
      */
     fun showFragmentToast(msg: String) {
-        runOnUiThread { toast(msg) }
+        if (isAdded) {
+            /*解决报错的问题
+            java.lang.IllegalStateException: Fragment HomeFragment{11dadcd (3d92d95c-8415-4bb1-b4d4-ad825a0209b8)} not attached to an activity.*/
+            runOnUiThread { toast(msg) }
+        }
     }
 }

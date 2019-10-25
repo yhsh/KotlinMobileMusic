@@ -8,8 +8,14 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import cn.xiayiye5.kotlinmobilemusic.R
 import cn.xiayiye5.kotlinmobilemusic.adapter.HomeAdapter
 import cn.xiayiye5.kotlinmobilemusic.base.BaseFragment
+import cn.xiayiye5.kotlinmobilemusic.module.HomeItemBean
+import cn.xiayiye5.kotlinmobilemusic.util.ThreadUtil
+import cn.xiayiye5.kotlinmobilemusic.util.URLProviderUtils
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import kotlinx.android.synthetic.main.fragment_home.*
-import kotlinx.android.synthetic.main.fragment_home.view.*
+import okhttp3.*
+import java.io.IOException
 
 /*
  * Copyright (c) 2019, smuyyh@gmail.com All Rights Reserved.
@@ -48,6 +54,7 @@ import kotlinx.android.synthetic.main.fragment_home.view.*
  * 项目包名：cn.xiayiye5.kotlinmobilemusic.ui.fragment
  */
 class HomeFragment : BaseFragment() {
+    val adapter by lazy { HomeAdapter() }
     override fun initView(): View? {
         val tv = TextView(context)
         tv.gravity = Gravity.CENTER
@@ -59,7 +66,39 @@ class HomeFragment : BaseFragment() {
     override fun initListener() {
         super.initListener()
         rv_recycleview.layoutManager = LinearLayoutManager(context)
-        val adapter = HomeAdapter()
         rv_recycleview.adapter = adapter
+    }
+
+    override fun initData() {
+        super.initData()
+        loadData()
+    }
+
+    private fun loadData() {
+        val homeUrl = URLProviderUtils.getHomeUrl(0, 20)
+        val client = OkHttpClient()
+        val request = Request.Builder()
+            .url(homeUrl)
+            .get()
+            .build()
+        client.newCall(request).enqueue(object : Callback {
+            override fun onFailure(call: Call, e: IOException) {
+                println("调用失败" + Thread.currentThread().name)
+                showFragmentToast("调用失败" + Thread.currentThread().name)
+            }
+
+            override fun onResponse(call: Call, response: Response) {
+                val result = response.body()?.string()
+                println("调用成功$result")
+                showFragmentToast("调用成功$result")
+                val gson = Gson()
+                val list = gson.fromJson<List<HomeItemBean>>(
+                    result,
+                    object : TypeToken<List<HomeItemBean>>() {}.type
+                )
+                println("打印集合${list.size}")
+                ThreadUtil.runOnMainThread(Runnable { adapter.updateList(list) })
+            }
+        })
     }
 }
