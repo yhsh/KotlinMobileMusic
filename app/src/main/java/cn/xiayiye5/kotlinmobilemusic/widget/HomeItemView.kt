@@ -1,14 +1,11 @@
-package cn.xiayiye5.kotlinmobilemusic.ui.fragment
+package cn.xiayiye5.kotlinmobilemusic.widget
 
-import android.graphics.Color
-import android.view.Gravity
+import android.content.Context
+import android.util.AttributeSet
 import android.view.View
-import android.widget.TextView
-import androidx.recyclerview.widget.LinearLayoutManager
+import android.widget.RelativeLayout
 import cn.xiayiye5.kotlinmobilemusic.R
 import cn.xiayiye5.kotlinmobilemusic.adapter.HomeAdapter
-import cn.xiayiye5.kotlinmobilemusic.base.BaseFragment
-import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.android.synthetic.main.fragment_home.view.*
 
 /*
@@ -39,27 +36,24 @@ import kotlinx.android.synthetic.main.fragment_home.view.*
  */
 /**
  * @author 下一页5（轻飞扬）
- * 创建时间：2019/10/22 17:41
+ * 创建时间：2019/10/25 13:32
  * 个人小站：http://yhsh.wap.ai(已挂)
  * 最新小站：http://www.iyhsh.icoc.in
  * 联系作者：企鹅 13343401268
  * 博客地址：http://blog.csdn.net/xiayiye5
  * 空间名称：KotlinMobileMusic
- * 项目包名：cn.xiayiye5.kotlinmobilemusic.ui.fragment
+ * 项目包名：cn.xiayiye5.kotlinmobilemusic.widget
  */
-class HomeFragment : BaseFragment() {
-    override fun initView(): View? {
-        val tv = TextView(context)
-        tv.gravity = Gravity.CENTER
-        tv.setTextColor(Color.RED)
-        tv.text = javaClass.simpleName
-        return View.inflate(context, R.layout.fragment_home, null)
-    }
+class HomeItemView : RelativeLayout {
+    constructor(context: Context?) : super(context)
+    constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs)
+    constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int) : super(
+        context,
+        attrs,
+        defStyleAttr
+    )
 
-    override fun initListener() {
-        super.initListener()
-        rv_recycleview.layoutManager = LinearLayoutManager(context)
-        val adapter = HomeAdapter()
-        rv_recycleview.adapter = adapter
+    init {
+        View.inflate(context, R.layout.item_home, this)
     }
 }

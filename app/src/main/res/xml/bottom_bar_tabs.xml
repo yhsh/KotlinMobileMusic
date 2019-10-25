@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen>
     <tab
-        icon="@mipmap/index_tab"
+        icon="@mipmap/ic_bottom_home_icon"
         id="@+id/tab_index"
         title="首页" />
     <tab
-        icon="@mipmap/index_tab"
+        icon="@mipmap/ic_bottom_mv_unselect"
         id="@+id/tab_mv"
         title="MV" />
     <tab
-        icon="@mipmap/index_tab"
+        icon="@mipmap/ic_bottom_vlist_unselect"
         id="@+id/tab_v_bang"
         title="V榜" />
     <tab
-        icon="@mipmap/index_tab"
+        icon="@mipmap/ic_bottom_mvlist_unselect"
         id="@+id/tab_music"
         title="悦单" />
 </PreferenceScreen>

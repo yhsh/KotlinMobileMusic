@@ -44,10 +44,10 @@ import cn.xiayiye5.kotlinmobilemusic.ui.fragment.YueDanFragment
  * 项目包名：cn.xiayiye5.kotlinmobilemusic.util
  */
 class FragmentUtil private constructor() {
-    val homeFragment by lazy { HomeFragment() }
-    val mvFragment by lazy { MVFragment() }
-    val vBangFragment by lazy { VBangFragment() }
-    val yueDanFragment by lazy { YueDanFragment() }
+    private val homeFragment by lazy { HomeFragment() }
+    private val mvFragment by lazy { MVFragment() }
+    private val vBangFragment by lazy { VBangFragment() }
+    private val yueDanFragment by lazy { YueDanFragment() }
 
     //私有的构造
     companion object {

@@ -6,6 +6,8 @@
     android:contentDescription="@string/app_name"
     android:orientation="vertical"
     android:scaleType="centerCrop"
-    android:src="@mipmap/splash">
+    android:scaleX="1.5"
+    android:scaleY="1.5"
+    android:src="@mipmap/default_splash_bg">
 
 </ImageView>
