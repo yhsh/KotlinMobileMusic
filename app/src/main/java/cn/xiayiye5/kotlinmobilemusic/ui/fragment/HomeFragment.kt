@@ -5,6 +5,7 @@ import android.view.Gravity
 import android.view.View
 import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import cn.xiayiye5.kotlinmobilemusic.R
 import cn.xiayiye5.kotlinmobilemusic.adapter.HomeAdapter
 import cn.xiayiye5.kotlinmobilemusic.base.BaseFragment
@@ -67,15 +68,34 @@ class HomeFragment : BaseFragment() {
         super.initListener()
         rv_recycleview.layoutManager = LinearLayoutManager(context)
         rv_recycleview.adapter = adapter
+        //初始化刷新控件
+        refreshLayout.setColorSchemeColors(Color.RED, Color.GREEN, Color.BLUE, Color.CYAN)
+        //监听刷新控件刷新
+        refreshLayout.setOnRefreshListener { loadData(0, false) }
+        rv_recycleview.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                    //空闲状态
+                    val layoutManager = rv_recycleview.layoutManager
+                    if (layoutManager is LinearLayoutManager) {
+                        val manager: LinearLayoutManager = layoutManager
+                        if (manager.findLastVisibleItemPosition() == adapter.itemCount - 1) {
+                            //证明已滑动到最下面一个天目了
+                            loadData(adapter.itemCount - 1, true)
+                        }
+                    }
+                }
+            }
+        })
     }
 
     override fun initData() {
         super.initData()
-        loadData()
+        loadData(0, false)
     }
 
-    private fun loadData() {
-        val homeUrl = URLProviderUtils.getHomeUrl(0, 20)
+    private fun loadData(offset: Int, isLoadMore: Boolean) {
+        val homeUrl = URLProviderUtils.getHomeUrl(offset, 20)
         val client = OkHttpClient()
         val request = Request.Builder()
             .url(homeUrl)
@@ -83,22 +103,37 @@ class HomeFragment : BaseFragment() {
             .build()
         client.newCall(request).enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {
+                hideRefresh()
                 println("调用失败" + Thread.currentThread().name)
                 showFragmentToast("调用失败" + Thread.currentThread().name)
             }
 
             override fun onResponse(call: Call, response: Response) {
+                hideRefresh()
                 val result = response.body()?.string()
                 println("调用成功$result")
-                showFragmentToast("调用成功$result")
+//                showFragmentToast("调用成功$result")
                 val gson = Gson()
                 val list = gson.fromJson<List<HomeItemBean>>(
                     result,
                     object : TypeToken<List<HomeItemBean>>() {}.type
                 )
                 println("打印集合${list.size}")
-                ThreadUtil.runOnMainThread(Runnable { adapter.updateList(list) })
+                ThreadUtil.runOnMainThread(Runnable {
+                    if (isLoadMore) {
+                        adapter.loadMoreList(list)
+                    } else {
+                        adapter.updateList(list)
+                    }
+                })
             }
+        })
+    }
+
+    fun hideRefresh() {
+        ThreadUtil.runOnMainThread(Runnable {
+            //隐藏刷新控件
+            refreshLayout.isRefreshing = false
         })
     }
 }

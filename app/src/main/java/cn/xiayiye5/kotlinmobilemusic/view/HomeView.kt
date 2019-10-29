@@ -1,13 +1,4 @@
-package cn.xiayiye5.kotlinmobilemusic.widget
-
-import android.content.Context
-import android.util.AttributeSet
-import android.view.View
-import android.widget.RelativeLayout
-import cn.xiayiye5.kotlinmobilemusic.R
-import cn.xiayiye5.kotlinmobilemusic.module.HomeItemBean
-import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.item_home.view.*
+package cn.xiayiye5.kotlinmobilemusic.view
 
 /*
  * Copyright (c) 2019, smuyyh@gmail.com All Rights Reserved.
@@ -37,30 +28,13 @@ import kotlinx.android.synthetic.main.item_home.view.*
  */
 /**
  * @author 下一页5（轻飞扬）
- * 创建时间：2019/10/25 13:32
+ * 创建时间：2019/10/29 15:15
  * 个人小站：http://yhsh.wap.ai(已挂)
  * 最新小站：http://www.iyhsh.icoc.in
  * 联系作者：企鹅 13343401268
  * 博客地址：http://blog.csdn.net/xiayiye5
  * 空间名称：KotlinMobileMusic
- * 项目包名：cn.xiayiye5.kotlinmobilemusic.widget
+ * 项目包名：cn.xiayiye5.kotlinmobilemusic.view
  */
-class HomeItemView : RelativeLayout {
-    fun setData(data: HomeItemBean) {
-        tittle.text = data.title
-        des.text = data.description
-        Picasso.with(context).load(data.posterPic).into(bg)
-    }
-
-    constructor(context: Context?) : super(context)
-    constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs)
-    constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int) : super(
-        context,
-        attrs,
-        defStyleAttr
-    )
-
-    init {
-        View.inflate(context, R.layout.item_home, this)
-    }
+interface HomeView {
 }

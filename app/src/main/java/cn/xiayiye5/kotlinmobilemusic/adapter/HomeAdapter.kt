@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import cn.xiayiye5.kotlinmobilemusic.module.HomeItemBean
 import cn.xiayiye5.kotlinmobilemusic.widget.HomeItemView
+import cn.xiayiye5.kotlinmobilemusic.widget.LoadMoreView
 
 /*
  * Copyright (c) 2019, smuyyh@gmail.com All Rights Reserved.
@@ -51,15 +52,40 @@ class HomeAdapter : RecyclerView.Adapter<HomeAdapter.HomeHolder>() {
         notifyDataSetChanged()
     }
 
+    //加载更多数据的方法
+    fun loadMoreList(list: List<HomeItemBean>) {
+        this.list.addAll(list)
+        notifyDataSetChanged()
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HomeHolder {
-        return HomeHolder(HomeItemView(parent?.context))
+        if (viewType == 1) {
+            //返回刷新进度条布局
+            return HomeHolder(LoadMoreView(parent?.context))
+        } else {
+            //返回正常条目布局
+            return HomeHolder(HomeItemView(parent?.context))
+        }
     }
 
     override fun getItemCount(): Int {
-        return list.size
+        return list.size + 1
+    }
+
+    override fun getItemViewType(position: Int): Int {
+        return if (position == list.size) {
+            //返回最后一条数据进度条布局
+            1
+        } else {
+            0
+        }
     }
 
     override fun onBindViewHolder(holder: HomeHolder, position: Int) {
+        //等于最后一条数据不刷新
+        if (position == list.size) {
+            return
+        }
         //获取条目数据
         val data = list.get(position)
         //获取条目view
