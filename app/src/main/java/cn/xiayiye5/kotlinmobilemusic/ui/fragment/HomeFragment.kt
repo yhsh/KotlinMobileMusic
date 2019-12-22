@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import cn.xiayiye5.kotlinmobilemusic.R
 import cn.xiayiye5.kotlinmobilemusic.adapter.HomeAdapter
 import cn.xiayiye5.kotlinmobilemusic.base.BaseFragment
-import cn.xiayiye5.kotlinmobilemusic.module.HomeItemBean
+import cn.xiayiye5.kotlinmobilemusic.module.HomeItemBeans
 import cn.xiayiye5.kotlinmobilemusic.util.ThreadUtil
 import cn.xiayiye5.kotlinmobilemusic.util.URLProviderUtils
 import com.google.gson.Gson
@@ -41,7 +41,7 @@ import java.io.IOException
  * #                       `=---='                     #
  * #     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~   #
  * #                                                   #
- * #               佛祖保佑         永无BUG              #
+ * #               佛祖保佑         永无BUG            #
  * #                                                   #
  */
 /**
@@ -80,7 +80,7 @@ class HomeFragment : BaseFragment() {
                     if (layoutManager is LinearLayoutManager) {
                         val manager: LinearLayoutManager = layoutManager
                         if (manager.findLastVisibleItemPosition() == adapter.itemCount - 1) {
-                            //证明已滑动到最下面一个天目了
+                            //证明已滑动到最下面一个条目了
                             loadData(adapter.itemCount - 1, true)
                         }
                     }
@@ -114,16 +114,16 @@ class HomeFragment : BaseFragment() {
                 println("调用成功$result")
 //                showFragmentToast("调用成功$result")
                 val gson = Gson()
-                val list = gson.fromJson<List<HomeItemBean>>(
+                val list = gson.fromJson<HomeItemBeans>(
                     result,
-                    object : TypeToken<List<HomeItemBean>>() {}.type
+                    object : TypeToken<HomeItemBeans>() {}.type
                 )
-                println("打印集合${list.size}")
+                println("打印集合${list.data.size}")
                 ThreadUtil.runOnMainThread(Runnable {
                     if (isLoadMore) {
-                        adapter.loadMoreList(list)
+                        adapter.loadMoreList(list.data)
                     } else {
-                        adapter.updateList(list)
+                        adapter.updateList(list.data)
                     }
                 })
             }
