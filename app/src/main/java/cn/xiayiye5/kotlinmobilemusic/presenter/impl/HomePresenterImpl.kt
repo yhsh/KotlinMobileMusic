@@ -1,7 +1,14 @@
 package cn.xiayiye5.kotlinmobilemusic.presenter.impl
 
+import cn.xiayiye5.kotlinmobilemusic.module.HomeItemBeans
 import cn.xiayiye5.kotlinmobilemusic.presenter.interf.HomePresenter
+import cn.xiayiye5.kotlinmobilemusic.util.ThreadUtil
+import cn.xiayiye5.kotlinmobilemusic.util.URLProviderUtils
 import cn.xiayiye5.kotlinmobilemusic.view.HomeView
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
+import okhttp3.*
+import java.io.IOException
 
 /*
  * Copyright (c) 2019, smuyyh@gmail.com All Rights Reserved.
@@ -26,7 +33,7 @@ import cn.xiayiye5.kotlinmobilemusic.view.HomeView
  * #                       `=---='                     #
  * #     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~   #
  * #                                                   #
- * #               佛祖保佑         永无BUG              #
+ * #               佛祖保佑         永无BUG            #
  * #                                                   #
  */
 /**
@@ -40,4 +47,37 @@ import cn.xiayiye5.kotlinmobilemusic.view.HomeView
  * 项目包名：cn.xiayiye5.kotlinmobilemusic.presenter.impl
  */
 class HomePresenterImpl(var homeView: HomeView) : HomePresenter {
+    override fun loadData(offset: Int, isLoadMore: Boolean) {
+        val homeUrl = URLProviderUtils.getHomeUrl(offset, 20)
+        val client = OkHttpClient()
+        val request = Request.Builder()
+            .url(homeUrl)
+            .get()
+            .build()
+        client.newCall(request).enqueue(object : Callback {
+            override fun onFailure(call: Call, e: IOException) {
+                println("调用失败" + Thread.currentThread().name)
+                ThreadUtil.runOnMainThread(Runnable {
+                    homeView.requestFail(e.message)
+                })
+            }
+
+            override fun onResponse(call: Call, response: Response) {
+                val result = response.body()?.string()
+                println("调用成功$result")
+                val gson = Gson()
+                val list = gson.fromJson<HomeItemBeans>(
+                    result, object : TypeToken<HomeItemBeans>() {}.type
+                )
+                println("打印集合${list.data.size}")
+                ThreadUtil.runOnMainThread(Runnable {
+                    if (isLoadMore) {
+                        homeView.loadMoreList(list.data)
+                    } else {
+                        homeView.updateList(list.data)
+                    }
+                })
+            }
+        })
+    }
 }

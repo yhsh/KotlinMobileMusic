@@ -1,9 +1,7 @@
-package cn.xiayiye5.kotlinmobilemusic.view
-
-import cn.xiayiye5.kotlinmobilemusic.module.HomeItemBean
+package cn.xiayiye5.kotlinmobilemusic.net
 
 /*
- * Copyright (c) 2019, smuyyh@gmail.com All Rights Reserved.
+ * Copyright (c) 2020, smuyyh@gmail.com All Rights Reserved.
  * #                                                   #
  * #                       _oo0oo_                     #
  * #                      o8888888o                    #
@@ -28,29 +26,19 @@ import cn.xiayiye5.kotlinmobilemusic.module.HomeItemBean
  * #               佛祖保佑         永无BUG            #
  * #                                                   #
  */
+
 /**
  * @author 下一页5（轻飞扬）
- * 创建时间：2019/10/29 15:15
+ * 创建时间：2019/12/22 16:04
  * 个人小站：http://yhsh.wap.ai(已挂)
  * 最新小站：http://www.iyhsh.icoc.in
  * 联系作者：企鹅 13343401268
  * 博客地址：http://blog.csdn.net/xiayiye5
- * 空间名称：KotlinMobileMusic
- * 项目包名：cn.xiayiye5.kotlinmobilemusic.view
+ * 项目名称：KotlinMobileMusic
+ * 项目包名：cn.xiayiye5.kotlinmobilemusic.net
+ * 文件说明：请求回调的方法
  */
-interface HomeView {
-    /**
-     * 加载更多数据的方法
-     */
-    fun loadMoreList(data: List<HomeItemBean>)
-
-    /**
-     * 更新数据的方法
-     */
-    fun updateList(data: List<HomeItemBean>)
-
-    /**
-     * 网络请求失败的方法
-     */
-    fun requestFail(message: String?)
+interface ResponseHandler<RESPONSE> {
+    fun onError(msg: String)
+    fun onSuccess(msg: RESPONSE)
 }

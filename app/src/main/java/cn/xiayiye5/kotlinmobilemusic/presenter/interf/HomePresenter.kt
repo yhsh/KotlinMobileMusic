@@ -23,7 +23,7 @@ package cn.xiayiye5.kotlinmobilemusic.presenter.interf
  * #                       `=---='                     #
  * #     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~   #
  * #                                                   #
- * #               佛祖保佑         永无BUG              #
+ * #               佛祖保佑         永无BUG            #
  * #                                                   #
  */
 /**
@@ -37,4 +37,10 @@ package cn.xiayiye5.kotlinmobilemusic.presenter.interf
  * 项目包名：cn.xiayiye5.kotlinmobilemusic.presenter.interf
  */
 interface HomePresenter {
+    /**
+     * 加载数据的方法
+     * @param offset 从多少条处开始加载
+     * @param isLoadMore 是否加载更多的标识
+     */
+    fun loadData(offset: Int, isLoadMore: Boolean)
 }

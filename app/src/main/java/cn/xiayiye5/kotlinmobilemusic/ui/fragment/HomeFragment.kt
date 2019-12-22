@@ -9,14 +9,12 @@ import androidx.recyclerview.widget.RecyclerView
 import cn.xiayiye5.kotlinmobilemusic.R
 import cn.xiayiye5.kotlinmobilemusic.adapter.HomeAdapter
 import cn.xiayiye5.kotlinmobilemusic.base.BaseFragment
-import cn.xiayiye5.kotlinmobilemusic.module.HomeItemBeans
+import cn.xiayiye5.kotlinmobilemusic.module.HomeItemBean
+import cn.xiayiye5.kotlinmobilemusic.presenter.impl.HomePresenterImpl
 import cn.xiayiye5.kotlinmobilemusic.util.ThreadUtil
-import cn.xiayiye5.kotlinmobilemusic.util.URLProviderUtils
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
+import cn.xiayiye5.kotlinmobilemusic.view.HomeView
 import kotlinx.android.synthetic.main.fragment_home.*
-import okhttp3.*
-import java.io.IOException
+import org.jetbrains.anko.support.v4.toast
 
 /*
  * Copyright (c) 2019, smuyyh@gmail.com All Rights Reserved.
@@ -54,8 +52,10 @@ import java.io.IOException
  * 空间名称：KotlinMobileMusic
  * 项目包名：cn.xiayiye5.kotlinmobilemusic.ui.fragment
  */
-class HomeFragment : BaseFragment() {
+class HomeFragment : BaseFragment(), HomeView {
+
     val adapter by lazy { HomeAdapter() }
+    val homePresenterImpl by lazy { HomePresenterImpl(this) }
     override fun initView(): View? {
         val tv = TextView(context)
         tv.gravity = Gravity.CENTER
@@ -71,7 +71,7 @@ class HomeFragment : BaseFragment() {
         //初始化刷新控件
         refreshLayout.setColorSchemeColors(Color.RED, Color.GREEN, Color.BLUE, Color.CYAN)
         //监听刷新控件刷新
-        refreshLayout.setOnRefreshListener { loadData(0, false) }
+        refreshLayout.setOnRefreshListener { homePresenterImpl.loadData(0, false) }
         rv_recycleview.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 if (newState == RecyclerView.SCROLL_STATE_IDLE) {
@@ -81,7 +81,7 @@ class HomeFragment : BaseFragment() {
                         val manager: LinearLayoutManager = layoutManager
                         if (manager.findLastVisibleItemPosition() == adapter.itemCount - 1) {
                             //证明已滑动到最下面一个条目了
-                            loadData(adapter.itemCount - 1, true)
+                            homePresenterImpl.loadData(adapter.itemCount - 1, true)
                         }
                     }
                 }
@@ -90,50 +90,29 @@ class HomeFragment : BaseFragment() {
     }
 
     override fun initData() {
-        super.initData()
-        loadData(0, false)
+        homePresenterImpl.loadData(0, false)
     }
 
-    private fun loadData(offset: Int, isLoadMore: Boolean) {
-        val homeUrl = URLProviderUtils.getHomeUrl(offset, 20)
-        val client = OkHttpClient()
-        val request = Request.Builder()
-            .url(homeUrl)
-            .get()
-            .build()
-        client.newCall(request).enqueue(object : Callback {
-            override fun onFailure(call: Call, e: IOException) {
-                hideRefresh()
-                println("调用失败" + Thread.currentThread().name)
-                showFragmentToast("调用失败" + Thread.currentThread().name)
-            }
-
-            override fun onResponse(call: Call, response: Response) {
-                hideRefresh()
-                val result = response.body()?.string()
-                println("调用成功$result")
-//                showFragmentToast("调用成功$result")
-                val gson = Gson()
-                val list = gson.fromJson<HomeItemBeans>(
-                    result,
-                    object : TypeToken<HomeItemBeans>() {}.type
-                )
-                println("打印集合${list.data.size}")
-                ThreadUtil.runOnMainThread(Runnable {
-                    if (isLoadMore) {
-                        adapter.loadMoreList(list.data)
-                    } else {
-                        adapter.updateList(list.data)
-                    }
-                })
-            }
-        })
+    private fun hideRefresh() {
+        //隐藏刷新控件
+        refreshLayout.isRefreshing = false
     }
 
-    fun hideRefresh() {
-        ThreadUtil.runOnMainThread(Runnable {
-            //隐藏刷新控件
-            refreshLayout.isRefreshing = false
-        })
+    override fun loadMoreList(data: List<HomeItemBean>) {
+        //隐藏刷新控件
+        hideRefresh()
+        adapter.loadMoreList(data)
+    }
+
+    override fun updateList(data: List<HomeItemBean>) {
+        //隐藏刷新控件
+        hideRefresh()
+        adapter.updateList(data)
+    }
+
+    override fun requestFail(message: String?) {
+        //隐藏刷新控件
+        hideRefresh()
+        ThreadUtil.runOnMainThread(Runnable { toast(message + "") })
     }
 }
