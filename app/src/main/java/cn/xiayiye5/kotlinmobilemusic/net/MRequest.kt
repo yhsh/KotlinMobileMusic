@@ -1,5 +1,8 @@
 package cn.xiayiye5.kotlinmobilemusic.net
 
+import com.google.gson.Gson
+import java.lang.reflect.ParameterizedType
+
 /*
  * Copyright (c) 2020, smuyyh@gmail.com All Rights Reserved.
  * #                                                   #
@@ -38,5 +41,22 @@ package cn.xiayiye5.kotlinmobilemusic.net
  * 项目包名：cn.xiayiye5.kotlinmobilemusic.net
  * 文件说明：所有网络请求的基类封装
  */
-class MRequest<RESPONSE>(val url: String, val handler: ResponseHandler<RESPONSE>) {
+open class MRequest<RESPONSE>(val url: String, val handler: ResponseHandler<RESPONSE>) {
+    /**
+     * 解析网络请求的方法
+     */
+    fun parseResult(result: String?): RESPONSE {
+        val gson = Gson()
+        //获取泛型的方法
+        val type =
+            (this.javaClass.genericSuperclass as ParameterizedType).actualTypeArguments[0]
+        return gson.fromJson<RESPONSE>(result, type)
+    }
+
+    /**
+     * 抽取在基类中发送网络请求
+     */
+    fun execute() {
+        NetManager.manager.sendRequest(this)
+    }
 }

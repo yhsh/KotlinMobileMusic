@@ -1,14 +1,10 @@
 package cn.xiayiye5.kotlinmobilemusic.presenter.impl
 
 import cn.xiayiye5.kotlinmobilemusic.module.HomeItemBeans
+import cn.xiayiye5.kotlinmobilemusic.net.HomeRequest
+import cn.xiayiye5.kotlinmobilemusic.net.ResponseHandler
 import cn.xiayiye5.kotlinmobilemusic.presenter.interf.HomePresenter
-import cn.xiayiye5.kotlinmobilemusic.util.ThreadUtil
-import cn.xiayiye5.kotlinmobilemusic.util.URLProviderUtils
 import cn.xiayiye5.kotlinmobilemusic.view.HomeView
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
-import okhttp3.*
-import java.io.IOException
 
 /*
  * Copyright (c) 2019, smuyyh@gmail.com All Rights Reserved.
@@ -48,36 +44,19 @@ import java.io.IOException
  */
 class HomePresenterImpl(var homeView: HomeView) : HomePresenter {
     override fun loadData(offset: Int, isLoadMore: Boolean) {
-        val homeUrl = URLProviderUtils.getHomeUrl(offset, 20)
-        val client = OkHttpClient()
-        val request = Request.Builder()
-            .url(homeUrl)
-            .get()
-            .build()
-        client.newCall(request).enqueue(object : Callback {
-            override fun onFailure(call: Call, e: IOException) {
-                println("调用失败" + Thread.currentThread().name)
-                ThreadUtil.runOnMainThread(Runnable {
-                    homeView.requestFail(e.message)
-                })
+        HomeRequest(offset, object : ResponseHandler<HomeItemBeans> {
+            override fun onError(msg: String?) {
+                homeView.requestFail(msg)
             }
 
-            override fun onResponse(call: Call, response: Response) {
-                val result = response.body()?.string()
-                println("调用成功$result")
-                val gson = Gson()
-                val list = gson.fromJson<HomeItemBeans>(
-                    result, object : TypeToken<HomeItemBeans>() {}.type
-                )
-                println("打印集合${list.data.size}")
-                ThreadUtil.runOnMainThread(Runnable {
-                    if (isLoadMore) {
-                        homeView.loadMoreList(list.data)
-                    } else {
-                        homeView.updateList(list.data)
-                    }
-                })
+            override fun onSuccess(successMsg: HomeItemBeans) {
+                if (isLoadMore) {
+                    homeView.loadMoreList(successMsg.data)
+                } else {
+                    homeView.updateList(successMsg.data)
+                }
             }
-        })
+
+        }).execute()
     }
 }

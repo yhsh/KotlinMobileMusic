@@ -1,12 +1,8 @@
 package cn.xiayiye5.kotlinmobilemusic.net
 
+import cn.xiayiye5.kotlinmobilemusic.module.HomeItemBean
 import cn.xiayiye5.kotlinmobilemusic.module.HomeItemBeans
-import cn.xiayiye5.kotlinmobilemusic.util.ThreadUtil
 import cn.xiayiye5.kotlinmobilemusic.util.URLProviderUtils
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
-import okhttp3.*
-import java.io.IOException
 
 /*
  * Copyright (c) 2020, smuyyh@gmail.com All Rights Reserved.
@@ -37,45 +33,15 @@ import java.io.IOException
 
 /**
  * @author 下一页5（轻飞扬）
- * 创建时间：2019/12/22 16:15
+ * 创建时间：2019/12/22 16:42
  * 个人小站：http://yhsh.wap.ai(已挂)
  * 最新小站：http://www.iyhsh.icoc.in
  * 联系作者：企鹅 13343401268
  * 博客地址：http://blog.csdn.net/xiayiye5
  * 项目名称：KotlinMobileMusic
- * 项目包名：cn.xiayiye5.kotlinmobilemusic.net
- * 文件说明：发送网络请求类
+ * 文件包名：cn.xiayiye5.kotlinmobilemusic.net
+ * 文件说明：首页网络请求
  */
-class NetManager private constructor() {
-    companion object {
-        val manager by lazy { NetManager() }
-    }
-
-    val client by lazy {
-        OkHttpClient()
-    }
-
-    fun <RESPONSE> sendRequest(req: MRequest<RESPONSE>) {
-        val request = Request.Builder()
-            .url(req.url)
-            .get()
-            .build()
-        client.newCall(request).enqueue(object : Callback {
-            override fun onFailure(call: Call, e: IOException) {
-                println("调用失败" + Thread.currentThread().name)
-                ThreadUtil.runOnMainThread(Runnable {
-                    req.handler.onError(e.message)
-                })
-            }
-
-            override fun onResponse(call: Call, response: Response) {
-                val result = response.body()?.string()
-                println("调用成功$result")
-                val parseResult = req.parseResult(result)
-                ThreadUtil.runOnMainThread(Runnable {
-                    req.handler.onSuccess(parseResult)
-                })
-            }
-        })
-    }
+class HomeRequest(offset: Int, handler: ResponseHandler<HomeItemBeans>) :
+    MRequest<HomeItemBeans>(URLProviderUtils.getHomeUrl(offset, 20), handler) {
 }
