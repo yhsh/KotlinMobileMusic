@@ -42,21 +42,36 @@ import cn.xiayiye5.kotlinmobilemusic.view.HomeView
  * 空间名称：KotlinMobileMusic
  * 项目包名：cn.xiayiye5.kotlinmobilemusic.presenter.impl
  */
-class HomePresenterImpl(var homeView: HomeView) : HomePresenter {
+class HomePresenterImpl(var homeView: HomeView?) : HomePresenter, ResponseHandler<HomeItemBeans> {
+    var TYPE_INIT_OR_REFRESH = 1
+    var TYPE_LOAD_MORE = 2
+    override fun onError(type: Int, msg: String?) {
+        homeView?.requestFail(msg)
+    }
+
+    override fun onSuccess(type: Int, successMsg: HomeItemBeans) {
+        if (type == TYPE_LOAD_MORE) {
+            homeView?.loadMoreList(successMsg.data)
+        } else {
+            homeView?.updateList(successMsg.data)
+        }
+    }
+
     override fun loadData(offset: Int, isLoadMore: Boolean) {
-        HomeRequest(offset, object : ResponseHandler<HomeItemBeans> {
-            override fun onError(msg: String?) {
-                homeView.requestFail(msg)
-            }
+        if (isLoadMore) {
+            HomeRequest(TYPE_INIT_OR_REFRESH, offset, this).execute()
+        } else {
+            HomeRequest(TYPE_LOAD_MORE, offset, this).execute()
+        }
 
-            override fun onSuccess(successMsg: HomeItemBeans) {
-                if (isLoadMore) {
-                    homeView.loadMoreList(successMsg.data)
-                } else {
-                    homeView.updateList(successMsg.data)
-                }
-            }
+    }
 
-        }).execute()
+    /**
+     * 解绑view的操作
+     */
+    fun destroyView() {
+        if (homeView != null) {
+            homeView = null
+        }
     }
 }

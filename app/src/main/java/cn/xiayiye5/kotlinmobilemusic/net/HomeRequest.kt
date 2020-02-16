@@ -1,6 +1,5 @@
 package cn.xiayiye5.kotlinmobilemusic.net
 
-import cn.xiayiye5.kotlinmobilemusic.module.HomeItemBean
 import cn.xiayiye5.kotlinmobilemusic.module.HomeItemBeans
 import cn.xiayiye5.kotlinmobilemusic.util.URLProviderUtils
 
@@ -42,6 +41,6 @@ import cn.xiayiye5.kotlinmobilemusic.util.URLProviderUtils
  * 文件包名：cn.xiayiye5.kotlinmobilemusic.net
  * 文件说明：首页网络请求
  */
-class HomeRequest(offset: Int, handler: ResponseHandler<HomeItemBeans>) :
-    MRequest<HomeItemBeans>(URLProviderUtils.getHomeUrl(offset, 20), handler) {
+class HomeRequest(type: Int, offset: Int, handler: ResponseHandler<HomeItemBeans>) :
+    MRequest<HomeItemBeans>(type, URLProviderUtils.getHomeUrl(offset, 20), handler) {
 }

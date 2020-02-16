@@ -39,6 +39,6 @@ package cn.xiayiye5.kotlinmobilemusic.net
  * 文件说明：请求回调的方法
  */
 interface ResponseHandler<RESPONSE> {
-    fun onError(msg: String?)
-    fun onSuccess(successMsg: RESPONSE)
+    fun onError(type: Int, msg: String?)
+    fun onSuccess(type: Int, successMsg: RESPONSE)
 }

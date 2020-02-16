@@ -1,10 +1,6 @@
 package cn.xiayiye5.kotlinmobilemusic.net
 
-import cn.xiayiye5.kotlinmobilemusic.module.HomeItemBeans
 import cn.xiayiye5.kotlinmobilemusic.util.ThreadUtil
-import cn.xiayiye5.kotlinmobilemusic.util.URLProviderUtils
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import okhttp3.*
 import java.io.IOException
 
@@ -64,17 +60,21 @@ class NetManager private constructor() {
             override fun onFailure(call: Call, e: IOException) {
                 println("调用失败" + Thread.currentThread().name)
                 ThreadUtil.runOnMainThread(Runnable {
-                    req.handler.onError(e.message)
+                    req.handler.onError(req.type, e.message)
                 })
             }
 
             override fun onResponse(call: Call, response: Response) {
-                val result = response.body()?.string()
-                println("调用成功$result")
-                val parseResult = req.parseResult(result)
-                ThreadUtil.runOnMainThread(Runnable {
-                    req.handler.onSuccess(parseResult)
-                })
+                if (response.code() == 200) {
+                    val result = response.body()?.string()
+                    println("调用成功$result")
+                    val parseResult = req.parseResult(result)
+                    ThreadUtil.runOnMainThread(Runnable {
+                        req.handler.onSuccess(req.type, parseResult)
+                    })
+                } else {
+                    req.handler.onError(req.type, response.message())
+                }
             }
         })
     }

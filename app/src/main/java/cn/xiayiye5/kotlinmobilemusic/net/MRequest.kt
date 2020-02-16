@@ -41,7 +41,11 @@ import java.lang.reflect.ParameterizedType
  * 项目包名：cn.xiayiye5.kotlinmobilemusic.net
  * 文件说明：所有网络请求的基类封装
  */
-open class MRequest<RESPONSE>(val url: String, val handler: ResponseHandler<RESPONSE>) {
+open class MRequest<RESPONSE>(
+    val type: Int,
+    val url: String,
+    val handler: ResponseHandler<RESPONSE>
+) {
     /**
      * 解析网络请求的方法
      */
