@@ -1,11 +1,12 @@
 package cn.xiayiye5.kotlinmobilemusic.presenter.impl
 
+import cn.xiayiye5.kotlinmobilemusic.base.BaseView
+import cn.xiayiye5.kotlinmobilemusic.module.HomeItemBean
 import cn.xiayiye5.kotlinmobilemusic.module.HomeItemBeans
 import cn.xiayiye5.kotlinmobilemusic.net.HomeRequest
 import cn.xiayiye5.kotlinmobilemusic.net.ResponseHandler
-import cn.xiayiye5.kotlinmobilemusic.presenter.interf.BasePresenter
+import cn.xiayiye5.kotlinmobilemusic.presenter.interf.BaseListPresenter
 import cn.xiayiye5.kotlinmobilemusic.presenter.interf.HomePresenter
-import cn.xiayiye5.kotlinmobilemusic.view.HomeView
 
 /*
  * Copyright (c) 2019, smuyyh@gmail.com All Rights Reserved.
@@ -43,13 +44,14 @@ import cn.xiayiye5.kotlinmobilemusic.view.HomeView
  * 空间名称：KotlinMobileMusic
  * 项目包名：cn.xiayiye5.kotlinmobilemusic.presenter.impl
  */
-class HomePresenterImpl(var homeView: HomeView?) : HomePresenter, ResponseHandler<HomeItemBeans> {
+class HomePresenterImpl(var homeView: BaseView<List<HomeItemBean>>?) : HomePresenter,
+    ResponseHandler<HomeItemBeans> {
     override fun onError(type: Int, msg: String?) {
         homeView?.requestFail(msg)
     }
 
     override fun onSuccess(type: Int, successMsg: HomeItemBeans) {
-        if (type == BasePresenter.TYPE_LOAD_MORE) {
+        if (type == BaseListPresenter.TYPE_LOAD_MORE) {
             homeView?.loadMoreList(successMsg.data)
         } else {
             homeView?.updateList(successMsg.data)
@@ -58,9 +60,9 @@ class HomePresenterImpl(var homeView: HomeView?) : HomePresenter, ResponseHandle
 
     override fun loadData(offset: Int, isLoadMore: Boolean) {
         if (isLoadMore) {
-            HomeRequest(BasePresenter.TYPE_LOAD_MORE, offset, this).execute()
+            HomeRequest(BaseListPresenter.TYPE_LOAD_MORE, offset, this).execute()
         } else {
-            HomeRequest(BasePresenter.TYPE_INIT_OR_REFRESH, offset, this).execute()
+            HomeRequest(BaseListPresenter.TYPE_INIT_OR_REFRESH, offset, this).execute()
         }
 
     }
@@ -68,7 +70,7 @@ class HomePresenterImpl(var homeView: HomeView?) : HomePresenter, ResponseHandle
     /**
      * 解绑view的操作
      */
-    fun destroyView() {
+    override fun destroyView() {
         if (homeView != null) {
             homeView = null
         }

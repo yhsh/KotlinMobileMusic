@@ -1,11 +1,4 @@
-package cn.xiayiye5.kotlinmobilemusic.presenter.impl
-
-import cn.xiayiye5.kotlinmobilemusic.module.YueDanBean
-import cn.xiayiye5.kotlinmobilemusic.net.ResponseHandler
-import cn.xiayiye5.kotlinmobilemusic.net.YueDanRequest
-import cn.xiayiye5.kotlinmobilemusic.presenter.interf.BasePresenter
-import cn.xiayiye5.kotlinmobilemusic.presenter.interf.YueDanPresenter
-import cn.xiayiye5.kotlinmobilemusic.view.YueDanView
+package cn.xiayiye5.kotlinmobilemusic.base
 
 /*
  * Copyright (c) 2020, smuyyh@gmail.com All Rights Reserved.
@@ -36,34 +29,28 @@ import cn.xiayiye5.kotlinmobilemusic.view.YueDanView
 
 /**
  * @author 下一页5（轻飞扬）
- * 创建时间：2020/2/19 17:08
+ * 创建时间：2020/2/19 19:58
  * 个人小站：http://yhsh.wap.ai(已挂)
  * 最新小站：http://www.iyhsh.icoc.in
  * 联系作者：企鹅 13343401268
  * 博客地址：http://blog.csdn.net/xiayiye5
  * 项目名称：KotlinMobileMusic
- * 文件包名：cn.xiayiye5.kotlinmobilemusic.presenter.impl
- * 文件说明：
+ * 文件包名：cn.xiayiye5.kotlinmobilemusic.base
+ * 文件说明：所有页面的上拉刷新和下拉加载更多的基类
  */
-class YueDanPresenterImpl(var yueDanView: YueDanView?) : YueDanPresenter,
-    ResponseHandler<YueDanBean> {
-    override fun onError(type: Int, msg: String?) {
-        yueDanView?.requestFail(msg)
-    }
+interface BaseView<RESPONSE_DATA> {
+    /**
+     * 加载更多数据的方法
+     */
+    fun loadMoreList(data: RESPONSE_DATA?)
 
-    override fun onSuccess(type: Int, successMsg: YueDanBean) {
-        if (type == BasePresenter.TYPE_LOAD_MORE) {
-            yueDanView?.loadMoreList(successMsg)
-        } else {
-            yueDanView?.updateList(successMsg)
-        }
-    }
+    /**
+     * 更新数据的方法
+     */
+    fun updateList(data: RESPONSE_DATA?)
 
-    override fun loadData(offset: Int, isLoadMore: Boolean) {
-        if (isLoadMore) {
-            YueDanRequest(BasePresenter.TYPE_LOAD_MORE, offset, this).execute()
-        } else {
-            YueDanRequest(BasePresenter.TYPE_INIT_OR_REFRESH, offset, this).execute()
-        }
-    }
+    /**
+     * 网络请求失败的方法
+     */
+    fun requestFail(message: String?)
 }

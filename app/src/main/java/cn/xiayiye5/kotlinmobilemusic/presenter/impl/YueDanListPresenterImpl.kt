@@ -1,4 +1,11 @@
-package cn.xiayiye5.kotlinmobilemusic.presenter.interf
+package cn.xiayiye5.kotlinmobilemusic.presenter.impl
+
+import cn.xiayiye5.kotlinmobilemusic.base.BaseView
+import cn.xiayiye5.kotlinmobilemusic.module.YueDanBean
+import cn.xiayiye5.kotlinmobilemusic.net.ResponseHandler
+import cn.xiayiye5.kotlinmobilemusic.net.YueDanRequest
+import cn.xiayiye5.kotlinmobilemusic.presenter.interf.BaseListPresenter
+import cn.xiayiye5.kotlinmobilemusic.presenter.interf.YueDanListPresenter
 
 /*
  * Copyright (c) 2020, smuyyh@gmail.com All Rights Reserved.
@@ -35,19 +42,38 @@ package cn.xiayiye5.kotlinmobilemusic.presenter.interf
  * 联系作者：企鹅 13343401268
  * 博客地址：http://blog.csdn.net/xiayiye5
  * 项目名称：KotlinMobileMusic
- * 文件包名：cn.xiayiye5.kotlinmobilemusic.presenter.interf
+ * 文件包名：cn.xiayiye5.kotlinmobilemusic.presenter.impl
  * 文件说明：
  */
-interface YueDanPresenter :BasePresenter{
-//    companion object {
-//        val TYPE_INIT_OR_REFRESH = 1
-//        val TYPE_LOAD_MORE = 2
-//    }
+class YueDanListPresenterImpl(var yueDanView: BaseView<YueDanBean>?) : YueDanListPresenter,
+    ResponseHandler<YueDanBean> {
+
+    override fun onError(type: Int, msg: String?) {
+        yueDanView?.requestFail(msg)
+    }
+
+    override fun onSuccess(type: Int, successMsg: YueDanBean) {
+        if (type == BaseListPresenter.TYPE_LOAD_MORE) {
+            yueDanView?.loadMoreList(successMsg)
+        } else {
+            yueDanView?.updateList(successMsg)
+        }
+    }
+
+    override fun loadData(offset: Int, isLoadMore: Boolean) {
+        if (isLoadMore) {
+            YueDanRequest(BaseListPresenter.TYPE_LOAD_MORE, offset, this).execute()
+        } else {
+            YueDanRequest(BaseListPresenter.TYPE_INIT_OR_REFRESH, offset, this).execute()
+        }
+    }
 
     /**
-     * 加载数据的方法
-     * @param offset 从多少条处开始加载
-     * @param isLoadMore 是否加载更多的标识
+     * 解绑View的方法
      */
-    fun loadData(offset: Int, isLoadMore: Boolean)
+    override fun destroyView() {
+        if (yueDanView != null) {
+            yueDanView == null
+        }
+    }
 }

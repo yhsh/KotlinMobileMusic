@@ -1,19 +1,12 @@
 package cn.xiayiye5.kotlinmobilemusic.ui.fragment
 
-import android.graphics.Color
-import android.view.Gravity
-import android.view.View
-import android.widget.TextView
-import android.widget.Toast
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import cn.xiayiye5.kotlinmobilemusic.R
 import cn.xiayiye5.kotlinmobilemusic.adapter.HomeAdapter
-import cn.xiayiye5.kotlinmobilemusic.base.BaseFragment
+import cn.xiayiye5.kotlinmobilemusic.base.BaseListAdapter
+import cn.xiayiye5.kotlinmobilemusic.base.BaseListFragment
 import cn.xiayiye5.kotlinmobilemusic.module.HomeItemBean
 import cn.xiayiye5.kotlinmobilemusic.presenter.impl.HomePresenterImpl
-import cn.xiayiye5.kotlinmobilemusic.view.HomeView
-import kotlinx.android.synthetic.main.fragment_home.*
+import cn.xiayiye5.kotlinmobilemusic.presenter.interf.BaseListPresenter
+import cn.xiayiye5.kotlinmobilemusic.widget.HomeItemView
 
 /*
  * Copyright (c) 2019, smuyyh@gmail.com All Rights Reserved.
@@ -51,71 +44,21 @@ import kotlinx.android.synthetic.main.fragment_home.*
  * 空间名称：KotlinMobileMusic
  * 项目包名：cn.xiayiye5.kotlinmobilemusic.ui.fragment
  */
-class HomeFragment : BaseFragment(), HomeView {
-
-    val adapter by lazy { HomeAdapter() }
-    val homePresenterImpl by lazy { HomePresenterImpl(this) }
-    override fun initView(): View? {
-        val tv = TextView(context)
-        tv.gravity = Gravity.CENTER
-        tv.setTextColor(Color.RED)
-        tv.text = javaClass.simpleName
-        return View.inflate(context, R.layout.fragment_home, null)
+class HomeFragment : BaseListFragment<List<HomeItemBean>, HomeItemBean, HomeItemView>() {
+    override fun getList(data: List<HomeItemBean>?): List<HomeItemBean>? {
+        return data
     }
 
-    override fun initListener() {
-        super.initListener()
-        rvRecycleViewList.layoutManager = LinearLayoutManager(context)
-        rvRecycleViewList.adapter = adapter
-        //初始化刷新控件
-        refreshLayout.setColorSchemeColors(Color.RED, Color.GREEN, Color.BLUE, Color.CYAN)
-        //监听刷新控件刷新
-        refreshLayout.setOnRefreshListener { homePresenterImpl.loadData(0, false) }
-        rvRecycleViewList.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-                    //空闲状态
-                    val layoutManager = rvRecycleViewList.layoutManager
-                    if (layoutManager is LinearLayoutManager) {
-                        val manager: LinearLayoutManager = layoutManager
-                        if (manager.findLastVisibleItemPosition() == adapter.itemCount - 1) {
-                            //证明已滑动到最下面一个条目了
-                            homePresenterImpl.loadData(adapter.itemCount - 1, true)
-                        }
-                    }
-                }
-            }
-        })
+    override fun getSpecialAdapter(): BaseListAdapter<HomeItemBean, HomeItemView> {
+        return HomeAdapter()
     }
 
-    override fun initData() {
-        homePresenterImpl.loadData(0, false)
+    override fun getSpecialPresenter(): BaseListPresenter {
+        return HomePresenterImpl(this)
     }
 
-    private fun hideRefresh() {
-        //隐藏刷新控件
-        refreshLayout?.let {
-            refreshLayout.isRefreshing = false
-        }
-    }
-
-    override fun loadMoreList(data: List<HomeItemBean>) {
-        //隐藏刷新控件
-        hideRefresh()
-        adapter.loadMoreList(data)
-    }
-
-    override fun updateList(data: List<HomeItemBean>) {
-        //隐藏刷新控件
-        hideRefresh()
-        adapter.updateList(data)
-    }
-
-    override fun requestFail(message: String?) {
-        //隐藏刷新控件
-        hideRefresh()
-        if (activity != null) {
-            Toast.makeText(activity, message + "", Toast.LENGTH_LONG).show()
-        }
+    override fun onDestroyView() {
+        super.onDestroyView()
+        homePresenterImpl.destroyView()
     }
 }

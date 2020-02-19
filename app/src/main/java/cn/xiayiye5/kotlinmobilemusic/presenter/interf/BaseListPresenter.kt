@@ -38,9 +38,21 @@ package cn.xiayiye5.kotlinmobilemusic.presenter.interf
  * 文件包名：cn.xiayiye5.kotlinmobilemusic.presenter.impl
  * 文件说明：
  */
-interface BasePresenter {
+interface BaseListPresenter {
     companion object {
         val TYPE_INIT_OR_REFRESH = 1
         val TYPE_LOAD_MORE = 2
     }
+
+    /**
+     * 加载数据的方法
+     * @param offset 从多少条处开始加载
+     * @param isLoadMore 是否加载更多的标识
+     */
+    fun loadData(offset: Int, isLoadMore: Boolean)
+
+    /**
+     * 解绑view的操作
+     */
+    fun destroyView()
 }

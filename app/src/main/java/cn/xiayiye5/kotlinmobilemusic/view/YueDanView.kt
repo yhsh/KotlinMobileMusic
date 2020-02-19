@@ -1,6 +1,6 @@
 package cn.xiayiye5.kotlinmobilemusic.view
 
-import cn.xiayiye5.kotlinmobilemusic.module.HomeItemBean
+import cn.xiayiye5.kotlinmobilemusic.base.BaseView
 import cn.xiayiye5.kotlinmobilemusic.module.YueDanBean
 
 /*
@@ -41,19 +41,6 @@ import cn.xiayiye5.kotlinmobilemusic.module.YueDanBean
  * 文件包名：cn.xiayiye5.kotlinmobilemusic.view
  * 文件说明：
  */
-interface YueDanView {
-    /**
-     * 加载更多数据的方法
-     */
-    fun loadMoreList(data: YueDanBean)
+interface YueDanView : BaseView<List<YueDanBean.PlayListsBean>> {
 
-    /**
-     * 更新数据的方法
-     */
-    fun updateList(data: YueDanBean)
-
-    /**
-     * 网络请求失败的方法
-     */
-    fun requestFail(message: String?)
 }

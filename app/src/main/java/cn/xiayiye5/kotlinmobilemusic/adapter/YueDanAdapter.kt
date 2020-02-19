@@ -1,10 +1,8 @@
 package cn.xiayiye5.kotlinmobilemusic.adapter
 
-import android.view.View
-import android.view.ViewGroup
-import androidx.recyclerview.widget.RecyclerView
+import android.content.Context
+import cn.xiayiye5.kotlinmobilemusic.base.BaseListAdapter
 import cn.xiayiye5.kotlinmobilemusic.module.YueDanBean
-import cn.xiayiye5.kotlinmobilemusic.widget.LoadMoreView
 import cn.xiayiye5.kotlinmobilemusic.widget.YueDanItemView
 
 /*
@@ -45,53 +43,12 @@ import cn.xiayiye5.kotlinmobilemusic.widget.YueDanItemView
  * 文件包名：cn.xiayiye5.kotlinmobilemusic.adapter
  * 文件说明：
  */
-class YueDanAdapter : RecyclerView.Adapter<YueDanAdapter.YueDanHolder>() {
-    private var list = ArrayList<YueDanBean.PlayListsBean>()
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): YueDanHolder {
-        if (viewType == 0) {
-            return YueDanHolder(YueDanItemView(parent?.context))
-        } else {
-            return YueDanHolder(LoadMoreView(parent?.context))
-        }
+class YueDanAdapter : BaseListAdapter<YueDanBean.PlayListsBean, YueDanItemView>() {
+    override fun refreshItemView(itemView: YueDanItemView, data: YueDanBean.PlayListsBean) {
+        itemView.setData(data)
     }
 
-    fun updateList(fromList: List<YueDanBean.PlayListsBean>?) {
-        list.clear()
-        fromList?.let {
-            this.list.addAll(fromList)
-        }
-        notifyDataSetChanged()
-    }
-
-    override fun getItemCount(): Int {
-        return if (list.size == 0) {
-            0
-        } else {
-            list.size + 1
-        }
-    }
-
-    override fun onBindViewHolder(holder: YueDanHolder, position: Int) {
-        if (position == list.size) {
-            return
-        }
-        val data = list.get(position)
-        val yueDanItemView = holder?.itemView as YueDanItemView
-        yueDanItemView.setData(data)
-    }
-
-    class YueDanHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-
-    }
-
-    /**
-     * 获取不同条目的方法
-     */
-    override fun getItemViewType(position: Int): Int {
-        return if (position == list.size) {
-            1
-        } else {
-            0
-        }
+    override fun getItemView(context: Context?): YueDanItemView {
+        return YueDanItemView(context)
     }
 }

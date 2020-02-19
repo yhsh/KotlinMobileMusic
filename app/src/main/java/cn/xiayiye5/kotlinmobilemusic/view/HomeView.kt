@@ -1,5 +1,6 @@
 package cn.xiayiye5.kotlinmobilemusic.view
 
+import cn.xiayiye5.kotlinmobilemusic.base.BaseView
 import cn.xiayiye5.kotlinmobilemusic.module.HomeItemBean
 
 /*
@@ -38,19 +39,6 @@ import cn.xiayiye5.kotlinmobilemusic.module.HomeItemBean
  * 空间名称：KotlinMobileMusic
  * 项目包名：cn.xiayiye5.kotlinmobilemusic.view
  */
-interface HomeView {
-    /**
-     * 加载更多数据的方法
-     */
-    fun loadMoreList(data: List<HomeItemBean>)
+interface HomeView : BaseView<List<HomeItemBean>> {
 
-    /**
-     * 更新数据的方法
-     */
-    fun updateList(data: List<HomeItemBean>)
-
-    /**
-     * 网络请求失败的方法
-     */
-    fun requestFail(message: String?)
 }
