@@ -4,6 +4,7 @@ import android.graphics.Color
 import android.view.Gravity
 import android.view.View
 import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import cn.xiayiye5.kotlinmobilemusic.R
@@ -11,10 +12,8 @@ import cn.xiayiye5.kotlinmobilemusic.adapter.HomeAdapter
 import cn.xiayiye5.kotlinmobilemusic.base.BaseFragment
 import cn.xiayiye5.kotlinmobilemusic.module.HomeItemBean
 import cn.xiayiye5.kotlinmobilemusic.presenter.impl.HomePresenterImpl
-import cn.xiayiye5.kotlinmobilemusic.util.ThreadUtil
 import cn.xiayiye5.kotlinmobilemusic.view.HomeView
 import kotlinx.android.synthetic.main.fragment_home.*
-import org.jetbrains.anko.support.v4.toast
 
 /*
  * Copyright (c) 2019, smuyyh@gmail.com All Rights Reserved.
@@ -66,17 +65,17 @@ class HomeFragment : BaseFragment(), HomeView {
 
     override fun initListener() {
         super.initListener()
-        rv_recycleview.layoutManager = LinearLayoutManager(context)
-        rv_recycleview.adapter = adapter
+        rvRecycleViewList.layoutManager = LinearLayoutManager(context)
+        rvRecycleViewList.adapter = adapter
         //初始化刷新控件
         refreshLayout.setColorSchemeColors(Color.RED, Color.GREEN, Color.BLUE, Color.CYAN)
         //监听刷新控件刷新
         refreshLayout.setOnRefreshListener { homePresenterImpl.loadData(0, false) }
-        rv_recycleview.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+        rvRecycleViewList.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 if (newState == RecyclerView.SCROLL_STATE_IDLE) {
                     //空闲状态
-                    val layoutManager = rv_recycleview.layoutManager
+                    val layoutManager = rvRecycleViewList.layoutManager
                     if (layoutManager is LinearLayoutManager) {
                         val manager: LinearLayoutManager = layoutManager
                         if (manager.findLastVisibleItemPosition() == adapter.itemCount - 1) {
@@ -95,7 +94,9 @@ class HomeFragment : BaseFragment(), HomeView {
 
     private fun hideRefresh() {
         //隐藏刷新控件
-        refreshLayout.isRefreshing = false
+        refreshLayout?.let {
+            refreshLayout.isRefreshing = false
+        }
     }
 
     override fun loadMoreList(data: List<HomeItemBean>) {
@@ -113,6 +114,8 @@ class HomeFragment : BaseFragment(), HomeView {
     override fun requestFail(message: String?) {
         //隐藏刷新控件
         hideRefresh()
-        ThreadUtil.runOnMainThread(Runnable { toast(message + "") })
+        if (activity != null) {
+            Toast.makeText(activity, message + "", Toast.LENGTH_LONG).show()
+        }
     }
 }

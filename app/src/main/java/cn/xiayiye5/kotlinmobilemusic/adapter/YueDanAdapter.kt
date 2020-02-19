@@ -3,12 +3,12 @@ package cn.xiayiye5.kotlinmobilemusic.adapter
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import cn.xiayiye5.kotlinmobilemusic.module.HomeItemBean
-import cn.xiayiye5.kotlinmobilemusic.widget.HomeItemView
+import cn.xiayiye5.kotlinmobilemusic.module.YueDanBean
 import cn.xiayiye5.kotlinmobilemusic.widget.LoadMoreView
+import cn.xiayiye5.kotlinmobilemusic.widget.YueDanItemView
 
 /*
- * Copyright (c) 2019, smuyyh@gmail.com All Rights Reserved.
+ * Copyright (c) 2020, smuyyh@gmail.com All Rights Reserved.
  * #                                                   #
  * #                       _oo0oo_                     #
  * #                      o8888888o                    #
@@ -30,76 +30,68 @@ import cn.xiayiye5.kotlinmobilemusic.widget.LoadMoreView
  * #                       `=---='                     #
  * #     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~   #
  * #                                                   #
- * #               佛祖保佑         永无BUG              #
+ * #               佛祖保佑         永无BUG            #
  * #                                                   #
  */
+
 /**
  * @author 下一页5（轻飞扬）
- * 创建时间：2019/10/25 14:14
+ * 创建时间：2020/2/19 16:42
  * 个人小站：http://yhsh.wap.ai(已挂)
  * 最新小站：http://www.iyhsh.icoc.in
  * 联系作者：企鹅 13343401268
  * 博客地址：http://blog.csdn.net/xiayiye5
- * 空间名称：KotlinMobileMusic
- * 项目包名：cn.xiayiye5.kotlinmobilemusic.adapter
+ * 项目名称：KotlinMobileMusic
+ * 文件包名：cn.xiayiye5.kotlinmobilemusic.adapter
+ * 文件说明：
  */
-class HomeAdapter : RecyclerView.Adapter<HomeAdapter.HomeHolder>() {
-    private var list = ArrayList<HomeItemBean>()
-    //更新数据的方法
-    fun updateList(list: List<HomeItemBean>) {
-        this.list.clear()
-        this.list.addAll(list)
-        notifyDataSetChanged()
-    }
-
-    //加载更多数据的方法
-    fun loadMoreList(list: List<HomeItemBean>) {
-        this.list.addAll(list)
-        notifyDataSetChanged()
-    }
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HomeHolder {
-        if (viewType == 1) {
-            //返回刷新进度条布局
-            return HomeHolder(LoadMoreView(parent?.context))
+class YueDanAdapter : RecyclerView.Adapter<YueDanAdapter.YueDanHolder>() {
+    private var list = ArrayList<YueDanBean.PlayListsBean>()
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): YueDanHolder {
+        if (viewType == 0) {
+            return YueDanHolder(YueDanItemView(parent?.context))
         } else {
-            //返回正常条目布局
-            return HomeHolder(HomeItemView(parent?.context))
+            return YueDanHolder(LoadMoreView(parent?.context))
         }
+    }
+
+    fun updateList(fromList: List<YueDanBean.PlayListsBean>?) {
+        list.clear()
+        fromList?.let {
+            this.list.addAll(fromList)
+        }
+        notifyDataSetChanged()
     }
 
     override fun getItemCount(): Int {
-        if (list.size == 0) {
-            return 0
+        return if (list.size == 0) {
+            0
         } else {
-            return list.size + 1
+            list.size + 1
         }
     }
 
+    override fun onBindViewHolder(holder: YueDanHolder, position: Int) {
+        if (position == list.size) {
+            return
+        }
+        val data = list.get(position)
+        val yueDanItemView = holder?.itemView as YueDanItemView
+        yueDanItemView.setData(data)
+    }
+
+    class YueDanHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+
+    }
+
+    /**
+     * 获取不同条目的方法
+     */
     override fun getItemViewType(position: Int): Int {
         return if (position == list.size) {
-            //返回最后一条数据进度条布局
             1
         } else {
             0
         }
-    }
-
-    override fun onBindViewHolder(holder: HomeHolder, position: Int) {
-        //等于最后一条数据不刷新
-        if (position == list.size) {
-            return
-        }
-        //获取条目数据
-        val data = list.get(position)
-        //获取条目view
-        val itemView = holder.itemView as HomeItemView
-        //刷新条目数据
-        itemView.setData(data)
-    }
-
-    class HomeHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-
-
     }
 }

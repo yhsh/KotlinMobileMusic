@@ -37,4 +37,8 @@ dependencies {
     implementation("com.squareup.okhttp3:okhttp:3.8.1")
     implementation("com.google.code.gson:gson:2.2.4")
     implementation 'com.squareup.picasso:picasso:2.5.2'
+    //Picasso圆角图片库
+    implementation 'jp.wasabeef:picasso-transformations:2.2.1'
+    // If you want to use the GPU Filters
+    implementation 'jp.co.cyberagent.android.gpuimage:gpuimage-library:1.4.1'
 }

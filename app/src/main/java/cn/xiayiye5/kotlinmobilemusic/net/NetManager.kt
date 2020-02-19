@@ -47,9 +47,7 @@ class NetManager private constructor() {
         val manager by lazy { NetManager() }
     }
 
-    val client by lazy {
-        OkHttpClient()
-    }
+    val client by lazy { OkHttpClient() }
 
     fun <RESPONSE> sendRequest(req: MRequest<RESPONSE>) {
         val request = Request.Builder()
@@ -73,7 +71,9 @@ class NetManager private constructor() {
                         req.handler.onSuccess(req.type, parseResult)
                     })
                 } else {
-                    req.handler.onError(req.type, response.message())
+                    ThreadUtil.runOnMainThread(Runnable {
+                        req.handler.onError(req.type, response.message())
+                    })
                 }
             }
         })
