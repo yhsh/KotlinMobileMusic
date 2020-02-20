@@ -1,15 +1,12 @@
-package cn.xiayiye5.kotlinmobilemusic.ui.fragment
+package cn.xiayiye5.kotlinmobilemusic.ui.activity
 
-import cn.xiayiye5.kotlinmobilemusic.adapter.YueDanAdapter
-import cn.xiayiye5.kotlinmobilemusic.base.BaseListAdapter
-import cn.xiayiye5.kotlinmobilemusic.base.BaseListFragment
-import cn.xiayiye5.kotlinmobilemusic.module.YueDanBean
-import cn.xiayiye5.kotlinmobilemusic.presenter.impl.YueDanListPresenterImpl
-import cn.xiayiye5.kotlinmobilemusic.presenter.interf.BaseListPresenter
-import cn.xiayiye5.kotlinmobilemusic.widget.YueDanItemView
+import cn.xiayiye5.kotlinmobilemusic.R
+import cn.xiayiye5.kotlinmobilemusic.base.BaseActivity
+import cn.xiayiye5.kotlinmobilemusic.module.VideoPlayBean
+import kotlinx.android.synthetic.main.activity_video_player.*
 
 /*
- * Copyright (c) 2019, smuyyh@gmail.com All Rights Reserved.
+ * Copyright (c) 2020, smuyyh@gmail.com All Rights Reserved.
  * #                                                   #
  * #                       _oo0oo_                     #
  * #                      o8888888o                    #
@@ -31,34 +28,29 @@ import cn.xiayiye5.kotlinmobilemusic.widget.YueDanItemView
  * #                       `=---='                     #
  * #     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~   #
  * #                                                   #
- * #               佛祖保佑         永无BUG              #
+ * #               佛祖保佑         永无BUG            #
  * #                                                   #
  */
+
 /**
  * @author 下一页5（轻飞扬）
- * 创建时间：2019/10/22 17:41
+ * 创建时间：2020/2/20 15:49
  * 个人小站：http://yhsh.wap.ai(已挂)
  * 最新小站：http://www.iyhsh.icoc.in
  * 联系作者：企鹅 13343401268
  * 博客地址：http://blog.csdn.net/xiayiye5
- * 空间名称：KotlinMobileMusic
- * 项目包名：cn.xiayiye5.kotlinmobilemusic.ui.fragment
+ * 项目名称：KotlinMobileMusic
+ * 文件包名：cn.xiayiye5.kotlinmobilemusic.ui.activity
+ * 文件说明：MV视频播放页面
  */
-class YueDanFragment : BaseListFragment<YueDanBean, YueDanBean.PlayListsBean, YueDanItemView>() {
-    override fun getList(data: YueDanBean?): List<YueDanBean.PlayListsBean>? {
-        return data?.playLists
-    }
-
-    override fun getSpecialAdapter(): BaseListAdapter<YueDanBean.PlayListsBean, YueDanItemView> {
-        return YueDanAdapter()
-    }
-
-    override fun getSpecialPresenter(): BaseListPresenter {
-        return YueDanListPresenterImpl(this)
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        basePresenterImpl.destroyView()
+class VideoPlayerActivity : BaseActivity() {
+    override fun getLayoutId(): Int = R.layout.activity_video_player
+    override fun initData() {
+        super.initData()
+        val videoBean = intent.getParcelableExtra<VideoPlayBean>("item")
+        videoView.setVideoPath(videoBean.url)
+        videoView.setOnPreparedListener {
+            videoView.start()
+        }
     }
 }

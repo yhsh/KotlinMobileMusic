@@ -59,6 +59,6 @@ class HomeFragment : BaseListFragment<List<HomeItemBean>, HomeItemBean, HomeItem
 
     override fun onDestroyView() {
         super.onDestroyView()
-        homePresenterImpl.destroyView()
+        basePresenterImpl.destroyView()
     }
 }

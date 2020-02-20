@@ -50,7 +50,7 @@ import kotlinx.android.synthetic.main.fragment_home.*
 abstract class BaseListFragment<RESPONSE_DATA, ITEM_BEAN, ITEM_VIEW : View> : BaseFragment(),
     BaseView<RESPONSE_DATA> {
     val adapter by lazy { getSpecialAdapter() }
-    val homePresenterImpl by lazy { getSpecialPresenter() }
+    val basePresenterImpl by lazy { getSpecialPresenter() }
     override fun initView(): View? = View.inflate(context, R.layout.fragment_home, null)
 
     override fun initListener() {
@@ -60,7 +60,7 @@ abstract class BaseListFragment<RESPONSE_DATA, ITEM_BEAN, ITEM_VIEW : View> : Ba
         //初始化刷新控件
         refreshLayout.setColorSchemeColors(Color.RED, Color.GREEN, Color.BLUE, Color.CYAN)
         //监听刷新控件刷新
-        refreshLayout.setOnRefreshListener { homePresenterImpl.loadData(0, false) }
+        refreshLayout.setOnRefreshListener { basePresenterImpl.loadData(0, false) }
         rvRecycleViewList.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 if (newState == RecyclerView.SCROLL_STATE_IDLE) {
@@ -70,7 +70,7 @@ abstract class BaseListFragment<RESPONSE_DATA, ITEM_BEAN, ITEM_VIEW : View> : Ba
                         val manager: LinearLayoutManager = layoutManager
                         if (manager.findLastVisibleItemPosition() == adapter.itemCount - 1) {
                             //证明已滑动到最下面一个条目了
-                            homePresenterImpl.loadData(adapter.itemCount - 1, true)
+                            basePresenterImpl.loadData(adapter.itemCount - 1, true)
                         }
                     }
                 }
@@ -79,7 +79,7 @@ abstract class BaseListFragment<RESPONSE_DATA, ITEM_BEAN, ITEM_VIEW : View> : Ba
     }
 
     override fun initData() {
-        homePresenterImpl.loadData(0, false)
+        basePresenterImpl.loadData(0, false)
     }
 
     private fun hideRefresh() {
@@ -93,12 +93,14 @@ abstract class BaseListFragment<RESPONSE_DATA, ITEM_BEAN, ITEM_VIEW : View> : Ba
         //隐藏刷新控件
         hideRefresh()
         adapter.loadMoreList(getList(data))
+        tvShowError.visibility = View.GONE
     }
 
     override fun updateList(data: RESPONSE_DATA?) {
         //隐藏刷新控件
         hideRefresh()
         adapter.updateList(getList(data))
+        tvShowError.visibility = View.GONE
     }
 
     abstract fun getList(data: RESPONSE_DATA?): List<ITEM_BEAN>?
@@ -119,5 +121,7 @@ abstract class BaseListFragment<RESPONSE_DATA, ITEM_BEAN, ITEM_VIEW : View> : Ba
         if (activity != null) {
             Toast.makeText(activity, message + "", Toast.LENGTH_LONG).show()
         }
+        tvShowError.visibility = View.VISIBLE
+        tvShowError.text = message
     }
 }

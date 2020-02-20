@@ -102,11 +102,45 @@ abstract class BaseListAdapter<ITEM_BEAN, ITEM_VIEW : View> :
         val itemView = holder.itemView as ITEM_VIEW
         //刷新条目数据
         refreshItemView(itemView, data)
+        itemView.setOnClickListener {
+            //Java方法
+            /*if (listener != null) {
+                listener?.onClick(data)
+            }*/
+            //Kotlin判空方法一
+            listener?.let {
+                it(data)
+            }
+            //Kotlin判空方法二
+//            listener?.invoke(data)
+        }
     }
 
     class BaseListHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
     }
+
+    /**
+     * Kotlin版本的点击事件自定义接口回调
+     * */
+    var listener: ((itemBean: ITEM_BEAN) -> Unit)? = null
+
+    fun setMyListener(listener: (itemBean: ITEM_BEAN) -> Unit) {
+        this.listener = listener
+    }
+
+    /**
+     * Java版本的点击事件自定义接口回调
+     */
+    /*var listener: Listener<ITEM_BEAN>? = null
+
+    interface Listener<ITEM_BEAN> {
+        fun onClick(data: ITEM_BEAN)
+    }
+
+    fun setMyListener(listener: Listener<ITEM_BEAN>) {
+        this.listener = listener
+    }*/
 
     /**
      * 刷新条目的view

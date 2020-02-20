@@ -1,11 +1,14 @@
 package cn.xiayiye5.kotlinmobilemusic.ui.fragment
 
-import android.graphics.Color
-import android.view.Gravity
 import android.view.View
-import android.widget.TextView
 import cn.xiayiye5.kotlinmobilemusic.R
+import cn.xiayiye5.kotlinmobilemusic.adapter.MvPagerAdapter
 import cn.xiayiye5.kotlinmobilemusic.base.BaseFragment
+import cn.xiayiye5.kotlinmobilemusic.module.MvAreaBean
+import cn.xiayiye5.kotlinmobilemusic.presenter.impl.MvPresenterImpl
+import cn.xiayiye5.kotlinmobilemusic.view.MvView
+import kotlinx.android.synthetic.main.fragment_mv.*
+import org.jetbrains.anko.support.v4.toast
 
 /*
  * Copyright (c) 2019, smuyyh@gmail.com All Rights Reserved.
@@ -30,7 +33,7 @@ import cn.xiayiye5.kotlinmobilemusic.base.BaseFragment
  * #                       `=---='                     #
  * #     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~   #
  * #                                                   #
- * #               佛祖保佑         永无BUG              #
+ * #               佛祖保佑        永无BUG             #
  * #                                                   #
  */
 /**
@@ -43,12 +46,31 @@ import cn.xiayiye5.kotlinmobilemusic.base.BaseFragment
  * 空间名称：KotlinMobileMusic
  * 项目包名：cn.xiayiye5.kotlinmobilemusic.ui.fragment
  */
-class MVFragment : BaseFragment() {
-    override fun initView(): View? {
-        val tv = TextView(context)
-        tv.gravity = Gravity.CENTER
-        tv.setTextColor(Color.RED)
-        tv.text = javaClass.simpleName
-        return tv
+class MVFragment : BaseFragment(), MvView {
+    override fun onSuccess(successMsg: List<MvAreaBean>) {
+        tvShowError.visibility = View.GONE
+        tabLayout.visibility = View.VISIBLE
+        //在fragment中套fragment获取管理者最好使用getChildFragmentManager获取
+        val mvPagerAdapter = context?.let { MvPagerAdapter(it, successMsg, childFragmentManager) }
+        viewpager.adapter = mvPagerAdapter
+        tabLayout.setupWithViewPager(viewpager, true)
+    }
+
+    override fun onError(msg: String?) {
+        toast(msg.toString())
+        tvShowError.visibility = View.VISIBLE
+        tabLayout.visibility = View.GONE
+        tvShowError.text = msg
+    }
+
+    val presenter by lazy { MvPresenterImpl(this) }
+    override fun initView(): View? = View.inflate(context, R.layout.fragment_mv, null)
+    override fun initData() {
+        super.initData()
+        presenter.loadData();
+    }
+
+    override fun initListener() {
+        super.initListener()
     }
 }
