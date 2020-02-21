@@ -71,4 +71,58 @@ class YueDanBean {
             var vipLevel: Int = 0
         }
     }
+    /*{
+  "playLists": [
+    {
+      "creator": {
+        "largeAvatar": "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1582303320958&di=324e45a6557c896170de0dbaea0079f5&imgtype=0&src=http%3A%2F%2Fdownza.img.zz314.com%2Fedu%2Fpc%2Fwlgj-1008%2F2016-04-13%2Fe63a2625b5fa3be42e79b29199e442e5.jpg",
+        "nickName": "非主流"
+      },
+      "id": 1,
+      "playListPic": "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1582303368963&di=ed8d93002bc5dc661e7836665fb42d9c&imgtype=0&src=http%3A%2F%2Fimage.biaobaiju.com%2Fuploads%2F20180801%2F23%2F1533137108-yWUNxkzcFI.jpg",
+      "title": "非主流头像",
+      "videoCount": 30
+    },
+    {
+      "creator": {
+        "largeAvatar": "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1582287780542&di=3dc7b96418167d3e9c1cd472678f17e3&imgtype=0&src=http%3A%2F%2Fimage.biaobaiju.com%2Fuploads%2F20180301%2F17%2F1519896885-yVKqFEAktg.jpg",
+        "nickName": "手托"
+      },
+      "id": 2,
+      "playListPic": "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1582287719384&di=2c53b60be4b8c949f3117a7311fab353&imgtype=0&src=http%3A%2F%2Fpic.qqtn.com%2Fup%2F2018-3%2F2018031318115096721.jpg",
+      "title": "风景如画",
+      "videoCount": 32
+    },
+    {
+      "creator": {
+        "largeAvatar": "https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=327999534,100381109&fm=26&gp=0.jpg",
+        "nickName": "漫画小书生"
+      },
+      "id": 3,
+      "playListPic": "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1582288039825&di=962f703fd16ccafcb5b790a76a9e70de&imgtype=0&src=http%3A%2F%2Fimages.ali213.net%2Fpicfile%2Fpic%2F2013%2F02%2F05%2F927_1201261K038-7.jpg",
+      "title": "漫画",
+      "videoCount": 33
+    },
+    {
+      "creator": {
+        "largeAvatar": "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1582288179303&di=cba29a9c986a5f881063b797ddf5ad7b&imgtype=0&src=http%3A%2F%2Fdownza.img.zz314.com%2Fnews%2Fpc%2Fglgj-1024%2F2016-04-18%2Fd7dfd1757a23e25851129e3ac4f976b4.jpg",
+        "nickName": "笑傲江湖->教主归来"
+      },
+      "id": 4,
+      "playListPic": "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1582288080626&di=724be12e09a9341ce1d362ce0033956f&imgtype=0&src=http%3A%2F%2Fxa.wanmei.com%2Fresources%2Fjpg%2F141219%2F10071418987686971.jpg",
+      "title": "笑傲江湖",
+      "videoCount": 34
+    },
+    {
+      "creator": {
+        "largeAvatar": "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1582288607824&di=4b3496eefb380f4643901b042e5a3d92&imgtype=0&src=http%3A%2F%2Fwww.17qq.com%2Fimg_qqtouxiang%2F88516118.jpeg",
+        "nickName": "膨胀"
+      },
+      "id": 5,
+      "playListPic": "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1582288317550&di=538ee0bc5183c460918f6400db55402b&imgtype=0&src=http%3A%2F%2Fwww.17qq.com%2Fimg_qqtouxiang%2F79724692.jpeg",
+      "title": "荷花",
+      "videoCount": 35
+    }
+  ]
+}*/
 }

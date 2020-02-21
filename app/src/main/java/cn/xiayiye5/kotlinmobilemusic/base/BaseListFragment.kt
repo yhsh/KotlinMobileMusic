@@ -93,14 +93,14 @@ abstract class BaseListFragment<RESPONSE_DATA, ITEM_BEAN, ITEM_VIEW : View> : Ba
         //隐藏刷新控件
         hideRefresh()
         adapter.loadMoreList(getList(data))
-        tvShowError.visibility = View.GONE
+        tvShowError?.let { tvShowError.visibility = View.GONE }
     }
 
     override fun updateList(data: RESPONSE_DATA?) {
         //隐藏刷新控件
         hideRefresh()
         adapter.updateList(getList(data))
-        tvShowError.visibility = View.GONE
+        tvShowError?.let { tvShowError.visibility = View.GONE }
     }
 
     abstract fun getList(data: RESPONSE_DATA?): List<ITEM_BEAN>?
@@ -121,7 +121,9 @@ abstract class BaseListFragment<RESPONSE_DATA, ITEM_BEAN, ITEM_VIEW : View> : Ba
         if (activity != null) {
             Toast.makeText(activity, message + "", Toast.LENGTH_LONG).show()
         }
-        tvShowError.visibility = View.VISIBLE
-        tvShowError.text = message
+        tvShowError?.let {
+            tvShowError.visibility = View.VISIBLE
+            tvShowError.text = message
+        }
     }
 }

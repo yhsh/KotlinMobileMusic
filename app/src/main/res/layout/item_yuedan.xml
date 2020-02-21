@@ -21,34 +21,14 @@
 
         <ImageView
             android:id="@+id/author_image"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:layout_alignParentBottom="true"
-            android:layout_margin="10dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginBottom="15dp"
             android:contentDescription="@string/app_name" />
 
-        <TextView
-            android:id="@+id/count"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_marginBottom="2dp"
-            android:layout_toRightOf="@+id/author_image"
-            android:maxLines="1"
-            android:text="歌单"
-            android:textColor="#fff"
-            android:textSize="20sp" />
-
-        <TextView
-            android:id="@+id/authorName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_above="@id/author_image"
-            android:layout_toRightOf="@+id/author_image"
-            android:maxLines="1"
-            android:text="张三"
-            android:textColor="#fff"
-            android:textSize="20sp" />
 
         <TextView
             android:id="@+id/tittle"
@@ -58,7 +38,30 @@
             android:layout_toRightOf="@+id/author_image"
             android:maxLines="1"
             android:text="张三"
-            android:textColor="#fff"
+            android:textColor="#ddff00"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/authorName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/count"
+            android:layout_toRightOf="@+id/author_image"
+            android:maxLines="1"
+            android:text="张三"
+            android:textColor="#ff9090"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="15dp"
+            android:layout_toRightOf="@+id/author_image"
+            android:maxLines="1"
+            android:text="歌单"
+            android:textColor="#f4ff"
             android:textSize="20sp" />
     </RelativeLayout>
 </androidx.cardview.widget.CardView>

@@ -48,19 +48,25 @@ import org.jetbrains.anko.support.v4.toast
  */
 class MVFragment : BaseFragment(), MvView {
     override fun onSuccess(successMsg: List<MvAreaBean>) {
-        tvShowError.visibility = View.GONE
-        tabLayout.visibility = View.VISIBLE
+        tvShowError?.let {
+            tvShowError.visibility = View.GONE
+            tabLayout.visibility = View.VISIBLE
+        }
         //在fragment中套fragment获取管理者最好使用getChildFragmentManager获取
         val mvPagerAdapter = context?.let { MvPagerAdapter(it, successMsg, childFragmentManager) }
-        viewpager.adapter = mvPagerAdapter
-        tabLayout.setupWithViewPager(viewpager, true)
+        viewpager?.let {
+            viewpager.adapter = mvPagerAdapter
+            tabLayout.setupWithViewPager(viewpager, true)
+        }
     }
 
     override fun onError(msg: String?) {
-        toast(msg.toString())
-        tvShowError.visibility = View.VISIBLE
-        tabLayout.visibility = View.GONE
-        tvShowError.text = msg
+        tvShowError?.let {
+            toast(msg.toString())
+            tvShowError.visibility = View.VISIBLE
+            tabLayout.visibility = View.GONE
+            tvShowError.text = msg
+        }
     }
 
     val presenter by lazy { MvPresenterImpl(this) }

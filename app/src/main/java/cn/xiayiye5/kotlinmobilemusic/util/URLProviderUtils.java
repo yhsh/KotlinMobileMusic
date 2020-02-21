@@ -31,7 +31,8 @@ public class URLProviderUtils {
                 + "&size=" + size
                 + "&v=4&rn=640*540";
         Log.i("Main_url", url);
-        return url;
+        return "https://getman.cn/mock/home_item_view";
+//        return url;
     }
 
     public static String getMVareaUrl() {
@@ -46,7 +47,8 @@ public class URLProviderUtils {
                 + "\"uid\":"
                 + "\"dbcaa6c4482bc05ecb0bf39dabf207d2\","
                 + "\"clid\":110025000}";
-        return url;
+        return "https://getman.cn/mock/tab_layout_city";
+//        return url;
     }
 
     public static String getMVListUrl(String area, int offset, int size) {
@@ -64,7 +66,8 @@ public class URLProviderUtils {
                 + "&area=" + area
                 + "&offset=" + offset
                 + "&size=" + size;
-        return url;
+        return "https://getman.cn/mock/mv_list_item_view";
+//        return url;
     }
 
     public static String getYueDanUrl(int offset, int size) {
@@ -81,7 +84,8 @@ public class URLProviderUtils {
                 + "\"clid\":110025000}"
                 + "&offset=" + offset
                 + "&size=" + size;
-        return url;
+        return "https://getman.cn/mock/yuedan_item_view";
+//        return url;
     }
 
     /**

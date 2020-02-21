@@ -1,5 +1,7 @@
 package cn.xiayiye5.kotlinmobilemusic.ui.activity
 
+import android.view.View
+import android.widget.MediaController
 import cn.xiayiye5.kotlinmobilemusic.R
 import cn.xiayiye5.kotlinmobilemusic.base.BaseActivity
 import cn.xiayiye5.kotlinmobilemusic.module.VideoPlayBean
@@ -48,9 +50,17 @@ class VideoPlayerActivity : BaseActivity() {
     override fun initData() {
         super.initData()
         val videoBean = intent.getParcelableExtra<VideoPlayBean>("item")
+//        videoView.setVideoPath(videoBean.url)
+//        videoView.setOnPreparedListener {
+//            videoView.start()
+//        }
+
+        videoView.visibility = View.VISIBLE
+        videoView.start()
+        val mediaController = MediaController(this)
+        videoView.setMediaController(mediaController)
+        mediaController.setMediaPlayer(videoView)
         videoView.setVideoPath(videoBean.url)
-        videoView.setOnPreparedListener {
-            videoView.start()
-        }
+
     }
 }

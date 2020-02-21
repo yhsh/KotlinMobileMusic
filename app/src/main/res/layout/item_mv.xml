@@ -19,24 +19,27 @@
             android:contentDescription="@string/app_name" />
 
         <TextView
-            android:id="@+id/tittle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_marginBottom="2dp"
-            android:maxLines="1"
-            android:text="歌曲名称"
-            android:textColor="#fff"
-            android:textSize="20sp" />
-
-        <TextView
             android:id="@+id/artist"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_above="@id/tittle"
+            android:layout_marginLeft="30dp"
+            android:layout_marginBottom="2dp"
             android:maxLines="1"
             android:text="歌手名称"
             android:textColor="#00ff00"
-            android:textSize="24sp" />
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/tittle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginLeft="30dp"
+            android:layout_marginBottom="25dp"
+            android:maxLines="1"
+            android:text="歌曲名称"
+            android:textColor="#ef9f"
+            android:textSize="18sp" />
     </RelativeLayout>
 </androidx.cardview.widget.CardView>
