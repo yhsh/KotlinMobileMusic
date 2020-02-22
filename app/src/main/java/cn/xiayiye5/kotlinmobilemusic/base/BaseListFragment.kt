@@ -65,12 +65,14 @@ abstract class BaseListFragment<RESPONSE_DATA, ITEM_BEAN, ITEM_VIEW : View> : Ba
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 if (newState == RecyclerView.SCROLL_STATE_IDLE) {
                     //空闲状态
-                    val layoutManager = rvRecycleViewList.layoutManager
-                    if (layoutManager is LinearLayoutManager) {
-                        val manager: LinearLayoutManager = layoutManager
-                        if (manager.findLastVisibleItemPosition() == adapter.itemCount - 1) {
-                            //证明已滑动到最下面一个条目了
-                            basePresenterImpl.loadData(adapter.itemCount - 1, true)
+                    rvRecycleViewList?.let {
+                        val layoutManager = rvRecycleViewList.layoutManager
+                        if (layoutManager is LinearLayoutManager) {
+                            val manager: LinearLayoutManager = layoutManager
+                            if (manager.findLastVisibleItemPosition() == adapter.itemCount - 1) {
+                                //证明已滑动到最下面一个条目了
+                                basePresenterImpl.loadData(adapter.itemCount - 1, true)
+                            }
                         }
                     }
                 }

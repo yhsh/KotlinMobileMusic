@@ -30,7 +30,8 @@ public class URLProviderUtils {
                 + "&offset=" + offset
                 + "&size=" + size
                 + "&v=4&rn=640*540";
-        Log.i("Main_url", url);
+//        Log.i("Main_url", url);
+        Log.e("Main_url", "https://getman.cn/mock/home_item_view");
         return "https://getman.cn/mock/home_item_view";
 //        return url;
     }
@@ -47,6 +48,7 @@ public class URLProviderUtils {
                 + "\"uid\":"
                 + "\"dbcaa6c4482bc05ecb0bf39dabf207d2\","
                 + "\"clid\":110025000}";
+        Log.e("Main_url", "https://getman.cn/mock/tab_layout_city");
         return "https://getman.cn/mock/tab_layout_city";
 //        return url;
     }
@@ -66,6 +68,7 @@ public class URLProviderUtils {
                 + "&area=" + area
                 + "&offset=" + offset
                 + "&size=" + size;
+        Log.e("Main_url", "https://getman.cn/mock/mv_list_item_view");
         return "https://getman.cn/mock/mv_list_item_view";
 //        return url;
     }
@@ -84,6 +87,7 @@ public class URLProviderUtils {
                 + "\"clid\":110025000}"
                 + "&offset=" + offset
                 + "&size=" + size;
+        Log.e("Main_url", "https://getman.cn/mock/yuedan_item_view");
         return "https://getman.cn/mock/yuedan_item_view";
 //        return url;
     }

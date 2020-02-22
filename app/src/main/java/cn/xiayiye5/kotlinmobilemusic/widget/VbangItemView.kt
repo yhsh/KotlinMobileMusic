@@ -1,12 +1,14 @@
-package cn.xiayiye5.kotlinmobilemusic.ui.activity
+package cn.xiayiye5.kotlinmobilemusic.widget
 
+import android.content.Context
+import android.text.format.Formatter
+import android.util.AttributeSet
 import android.view.View
-import android.view.WindowManager
-import android.widget.MediaController
+import android.widget.RelativeLayout
 import cn.xiayiye5.kotlinmobilemusic.R
-import cn.xiayiye5.kotlinmobilemusic.base.BaseActivity
-import cn.xiayiye5.kotlinmobilemusic.module.VideoPlayBean
-import kotlinx.android.synthetic.main.activity_video_player.*
+import cn.xiayiye5.kotlinmobilemusic.module.AudioBean
+import kotlinx.android.synthetic.main.item_vbang.view.*
+import java.util.*
 
 /*
  * Copyright (c) 2020, smuyyh@gmail.com All Rights Reserved.
@@ -37,32 +39,31 @@ import kotlinx.android.synthetic.main.activity_video_player.*
 
 /**
  * @author 下一页5（轻飞扬）
- * 创建时间：2020/2/20 15:49
+ * 创建时间：2020/2/22 16:51
  * 个人小站：http://yhsh.wap.ai(已挂)
  * 最新小站：http://www.iyhsh.icoc.in
  * 联系作者：企鹅 13343401268
  * 博客地址：http://blog.csdn.net/xiayiye5
  * 项目名称：KotlinMobileMusic
- * 文件包名：cn.xiayiye5.kotlinmobilemusic.ui.activity
- * 文件说明：MV视频播放页面
+ * 文件包名：cn.xiayiye5.kotlinmobilemusic.widget
+ * 文件说明：
  */
-class VideoPlayerActivity : BaseActivity() {
-    override fun getLayoutId(): Int = R.layout.activity_video_player
-    override fun initData() {
-        super.initData()
-        //设置全屏
-        window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN)
-        val videoBean = intent.getParcelableExtra<VideoPlayBean>("item")
-//        videoView.setVideoPath(videoBean.url)
-//        videoView.setOnPreparedListener {
-//            videoView.start()
-//        }
+class VbangItemView : RelativeLayout {
+    fun setData(audioBean: AudioBean) {
+        tvTittle.text = audioBean.display_name
+        tvArtist.text = audioBean.artist
+        tvSize.text = Formatter.formatFileSize(context, audioBean.size)
+    }
 
-        videoView.visibility = View.VISIBLE
-        videoView.start()
-        val mediaController = MediaController(this)
-        videoView.setMediaController(mediaController)
-        mediaController.setMediaPlayer(videoView)
-        videoView.setVideoPath(videoBean.url)
+    constructor(context: Context?) : super(context)
+    constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs)
+    constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int) : super(
+        context,
+        attrs,
+        defStyleAttr
+    )
+
+    init {
+        View.inflate(context, R.layout.item_vbang, this)
     }
 }

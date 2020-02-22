@@ -46,4 +46,8 @@ object ThreadUtil {
     fun runOnMainThread(runnable: Runnable) {
         handler.post(runnable)
     }
+
+    fun newThread(runnable: Runnable) {
+        object : Thread(runnable) {}.start()
+    }
 }

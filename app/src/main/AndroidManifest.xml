@@ -3,6 +3,8 @@
     package="cn.xiayiye5.kotlinmobilemusic">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -22,7 +24,10 @@
         <activity android:name=".ui.activity.IndexActivity" />
         <activity android:name=".ui.activity.SettingActivity" />
         <activity android:name=".ui.activity.AboutActivity" />
-        <activity android:name=".ui.activity.VideoPlayerActivity" />
+        <activity
+            android:name=".ui.activity.VideoPlayerActivity"
+            android:screenOrientation="landscape" />
+        <activity android:name=".ui.activity.AudioPlayerActivity" />
     </application>
 
 </manifest>
