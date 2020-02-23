@@ -5,9 +5,9 @@
         <shape>
             <corners android:radius="5dip" />
             <gradient
-                android:startColor="@color/gray"
                 android:centerColor="@color/gray"
-                android:endColor="@color/gray"/>
+                android:endColor="@color/gray"
+                android:startColor="@color/gray" />
         </shape>
     </item>
 
@@ -25,10 +25,9 @@
             <shape>
                 <corners android:radius="5dip" />
                 <gradient
-                    android:startColor="@color/colorMusicProgress"
                     android:centerColor="@color/colorMusicProgress"
                     android:endColor="@color/colorMusicProgress"
-                    />
+                    android:startColor="@color/colorMusicProgress" />
             </shape>
         </clip>
     </item>

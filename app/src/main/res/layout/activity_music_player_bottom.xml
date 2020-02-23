@@ -34,12 +34,13 @@
         android:paddingLeft="20dp"
         android:paddingRight="20dp"
         android:paddingBottom="20dp">
-
+        <!--elevation:设置view的阴影高度-->
         <ImageView
             android:id="@+id/mode"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:elevation="30dp"
             android:src="@drawable/selector_btn_playmode_order" />
 
         <ImageView
