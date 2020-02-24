@@ -4,7 +4,20 @@ apply plugin: 'kotlin-android'
 
 apply plugin: 'kotlin-android-extensions'
 
+//获取时间的方法
+static def getNowTime() {
+    return new Date().format("yyyy-MM-dd HH-mm-ss", TimeZone.getTimeZone("GMT+8"))
+}
+
 android {
+    signingConfigs {
+        release {
+            storeFile file('D:\\Android\\StudioProjects\\KotlinMobileMusic\\XiaYiYeMusic.jks')
+            storePassword '123456'
+            keyAlias = 'XiaYiYeMusic'
+            keyPassword '123456'
+        }
+    }
     compileSdkVersion 28
     buildToolsVersion '28.0.3'
     defaultConfig {
@@ -13,16 +26,34 @@ android {
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
+        signingConfig signingConfigs.release
     }
     buildTypes {
         release {
             minifyEnabled false
+            //添加此行代码，可以在release包下打印log
+            debuggable true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
         }
     }
     compileOptions {
         targetCompatibility 1.8
         sourceCompatibility 1.8
+    }
+    /**
+     * 重命名APK
+     * defaultConfig.versionName：当前版本名字
+     * defaultConfig.versionCode：当前版本号
+     * getNowTime() ：获取当前时间的方法
+     * variant.name：当前打包默认的模式一般分两种：debug和release
+     * outputFileName：打包后的文件名字
+     */
+    applicationVariants.all { variant ->
+        variant.outputs.all {
+            def fileName = "手机影音" + "_v${defaultConfig.versionName}_c${defaultConfig.versionCode}_t${getNowTime()}_" + variant.name + ".apk"
+            outputFileName = fileName
+        }
     }
 }
 

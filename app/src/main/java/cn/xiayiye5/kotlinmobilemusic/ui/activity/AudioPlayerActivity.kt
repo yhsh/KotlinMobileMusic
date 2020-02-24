@@ -22,6 +22,7 @@ import de.greenrobot.event.EventBus
 import kotlinx.android.synthetic.main.activity_music_player_bottom.*
 import kotlinx.android.synthetic.main.activity_music_player_middle.*
 import kotlinx.android.synthetic.main.activity_music_player_top.*
+import org.jetbrains.anko.toast
 
 /*
  * Copyright (c) 2020, smuyyh@gmail.com All Rights Reserved.
@@ -82,6 +83,8 @@ class AudioPlayerActivity : BaseActivity(), View.OnClickListener, SeekBar.OnSeek
     override fun getLayoutId(): Int = R.layout.activity_audio_palyer
     override fun initData() {
         super.initData()
+        val extra = intent.getStringExtra("key")
+        extra?.let { toast(extra) }
         animationDrawable = audio_anim.drawable as AnimationDrawable
         //注册EventBus
         EventBus.getDefault().register(this)

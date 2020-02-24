@@ -27,7 +27,9 @@
         <activity
             android:name=".ui.activity.VideoPlayerActivity"
             android:screenOrientation="landscape" />
-        <activity android:name=".ui.activity.AudioPlayerActivity" />
+        <activity
+            android:name=".ui.activity.AudioPlayerActivity"
+            android:launchMode="singleTask" />
 
         <service android:name=".service.AudioService" />
     </application>

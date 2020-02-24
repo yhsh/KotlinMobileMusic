@@ -13,11 +13,13 @@
 
     <TextView
         android:id="@+id/tvTittle"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="5dp"
         android:layout_marginTop="5dp"
+        android:layout_marginRight="60dp"
         android:layout_toRightOf="@id/iv_music_logo"
+        android:singleLine="true"
         android:text="桥边姑娘" />
 
     <TextView
