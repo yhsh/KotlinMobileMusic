@@ -1,13 +1,11 @@
 package cn.xiayiye5.kotlinmobilemusic.service
 
-import android.app.Notification
-import android.app.NotificationManager
-import android.app.PendingIntent
-import android.app.Service
+import android.app.*
 import android.content.Context
 import android.content.Intent
 import android.media.MediaPlayer
 import android.os.Binder
+import android.os.Build
 import android.os.IBinder
 import android.util.Log
 import android.widget.RemoteViews
@@ -244,13 +242,29 @@ class AudioService : Service() {
         private fun showNotification() {
             notificationManagerService =
                 this@AudioService.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-            notificationService =
-                NotificationCompat.Builder(this@AudioService).setCustomContentView(getRemoveView())
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                val mChannel =
+                    NotificationChannel("通知栏监听音乐", "音乐", NotificationManager.IMPORTANCE_LOW);
+//                Toast.makeText(this@AudioService, mChannel.toString(), Toast.LENGTH_SHORT).show();
+                Log.e("打印渠道标识", mChannel.toString());
+                notificationManagerService?.createNotificationChannel(mChannel);
+                notificationService = Notification.Builder(this@AudioService)
+                    .setCustomContentView(getRemoveView())
                     .setContentIntent(getPendIntent())
-                    .setTicker("测试通知")
-                    .setContentText("播放歌曲")
+                    .setChannelId("通知栏监听音乐")
                     .setContentTitle("通知栏").setOngoing(true).setWhen(System.currentTimeMillis())
-                    .setSmallIcon(R.mipmap.ic_launcher).build()
+                    .setContentText("播放歌曲")
+                    .setSmallIcon(R.mipmap.ic_launcher).build();
+            } else {
+                notificationService =
+                    NotificationCompat.Builder(this@AudioService)
+                        .setCustomContentView(getRemoveView())
+                        .setContentIntent(getPendIntent())
+                        .setTicker("测试通知")
+                        .setContentText("播放歌曲")
+                        .setContentTitle("通知栏").setOngoing(true).setWhen(System.currentTimeMillis())
+                        .setSmallIcon(R.mipmap.ic_launcher).build()
+            }
             notificationManagerService?.notify(8, notificationService)
         }
 
