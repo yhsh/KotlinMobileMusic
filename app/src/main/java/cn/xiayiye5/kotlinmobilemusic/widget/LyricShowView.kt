@@ -7,6 +7,7 @@ import android.graphics.Paint
 import android.graphics.Rect
 import android.util.AttributeSet
 import android.util.Log
+import android.view.MotionEvent
 import android.view.View
 import android.widget.Toast
 import cn.xiayiye5.kotlinmobilemusic.R
@@ -77,6 +78,8 @@ class LyricShowView : View {
     private var duraction = 0;
     //歌曲当前播放进度
     private var progress = 0;
+    //是否可以通过进度更新歌词
+    private var updateByProgress = true;
 
     constructor(context: Context?) : super(context)
     constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs)
@@ -115,22 +118,25 @@ class LyricShowView : View {
      * 绘制多行文本
      */
     private fun drawMultiLine(canvas: Canvas?) {
-        //求居中行的偏移量
-        //行可用时间
-        var lineTime = 0
-        if (centerLine == list.size - 1) {
-            //最后一行,当前行时间减去最后一行时间
-            lineTime = duraction - list.get(centerLine).startTime
-        } else {
-            //行可用时间= 下一行减去居中行的时间
-            lineTime = list.get(centerLine + 1).startTime - list.get(centerLine).startTime
+        if (updateByProgress) {
+            //求居中行的偏移量
+            //行可用时间
+            var lineTime = 0
+            if (centerLine == list.size - 1) {
+                //最后一行,当前行时间减去最后一行时间
+                lineTime = duraction - list.get(centerLine).startTime
+            } else {
+                //行可用时间= 下一行减去居中行的时间
+                lineTime = list.get(centerLine + 1).startTime - list.get(centerLine).startTime
+            }
+            //偏移时间 = progress - 居中行开始时间
+            val offsetTime = progress - list.get(centerLine).startTime
+            //偏移百分比 = 偏移时间/行可用时间
+            val offsetPercent = offsetTime / (lineTime.toFloat())
+            //偏移量 = 行高 * 偏移百分比
+            offsetY = lineHeight * offsetPercent
         }
-        //偏移时间 = progress - 居中行开始时间
-        val offsetTime = progress - list.get(centerLine).startTime
-        //偏移百分比 = 偏移时间/行可用时间
-        val offsetPercent = offsetTime / (lineTime.toFloat())
-        //偏移量 = 行高 * 偏移百分比
-        val offsetY = lineHeight * offsetPercent
+
         val contentText = list.get(centerLine).content
         paint.getTextBounds(contentText, 0, contentText.length, bounds)
         val textH = bounds.height()
@@ -185,6 +191,7 @@ class LyricShowView : View {
      * 传递当前播放进度实现歌词播放
      */
     fun updateProgress(progress: Int) {
+        if (!updateByProgress) return
         this.progress = progress
         Log.e("打印歌曲进度", progress.toString())
         //判断是否为最后一行
@@ -221,5 +228,56 @@ class LyricShowView : View {
     fun setSongName(songName: String) {
         this.list.clear()
         list.addAll(LyricUtils.parseLyric(LyricLoaders.loadLyricFile(songName)))
+    }
+
+    var offsetY = 0f
+    var downY = 0f
+    var markY = 0f
+    override fun onTouchEvent(event: MotionEvent?): Boolean {
+        event?.let {
+            when (event.action) {
+                MotionEvent.ACTION_DOWN -> {
+                    updateByProgress = false
+                    downY = event.y
+                    //记录按下之前的偏移高度
+                    markY = this.offsetY
+                }
+                MotionEvent.ACTION_MOVE -> {
+                    val endY = event.y
+                    val offsetY = downY - endY
+                    this.offsetY = offsetY + markY
+                    //判断偏移高度是否大于行高
+                    if (Math.abs(this.offsetY) >= lineHeight) {
+                        //当前播放歌词进行偏移偏移出的行高
+                        val offsetLine = (this.offsetY / lineHeight).toInt()
+                        centerLine += offsetLine
+                        //对拖动歌词超出边界处理
+                        if (centerLine < 0) centerLine =
+                            0 else if (centerLine > list.size - 1) centerLine = list.size - 1
+                        this.downY = endY
+                        //重新确定偏移量Y
+                        this.offsetY = offsetY % lineHeight
+                        //重新记录Y的偏移量
+                        markY = this.offsetY
+                        //更新歌曲进度.下面两种方法都可以
+                        listener?.let {
+                            it(list.get(centerLine).startTime)
+                        }
+//                    listener?.invoke(list.get(centerLine).startTime)
+                    }
+                    //重新绘制
+                    invalidate()
+                }
+                MotionEvent.ACTION_UP -> updateByProgress = true
+            }
+        }
+        return true
+    }
+
+    //拖动歌词更新歌曲的播放进度的回调方法
+    private var listener: ((progress: Int) -> Unit)? = null
+
+    fun setProgressListener(listener: (progress: Int) -> Unit) {
+        this.listener = listener
     }
 }
