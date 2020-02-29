@@ -1,5 +1,8 @@
 package cn.xiayiye5.kotlinmobilemusic.util
 
+import android.os.Environment
+import java.io.File
+
 /*
  * Copyright (c) 2020, smuyyh@gmail.com All Rights Reserved.
  * #                                                   #
@@ -29,30 +32,19 @@ package cn.xiayiye5.kotlinmobilemusic.util
 
 /**
  * @author 下一页5（轻飞扬）
- * 创建时间：2020/2/23 20:07
+ * 创建时间：2020/2/28 23:11
  * 个人小站：http://yhsh.wap.ai(已挂)
  * 最新小站：http://www.iyhsh.icoc.in
  * 联系作者：企鹅 13343401268
  * 博客地址：http://blog.csdn.net/xiayiye5
  * 项目名称：KotlinMobileMusic
  * 文件包名：cn.xiayiye5.kotlinmobilemusic.util
- * 文件说明：格式化时间的工具
+ * 文件说明：加载歌词文件的工具类
  */
-object StringUtils {
-    val HOUR: Int = 60 * 60 * 1000
-    val MINUTE: Int = 60 * 1000
-    val SECOND: Int = 1000
-    var result = ""
-    fun parseProgress(progress: Int): String {
-        val hour = progress / HOUR
-        val minute = progress % HOUR / MINUTE
-        val secound = progress % MINUTE / SECOND
-        if (hour == 0) {
-            //不足一小时
-            result = String.format("%02d:%02d", minute, secound)
-        } else {
-            result = String.format("%02d:%02d:%02d", hour, minute, secound)
-        }
-        return result
+object LyricLoaders {
+    var lyricDir = File(Environment.getExternalStorageDirectory(), "XiaYiYeMusic/lyric")
+    //加载歌词文件的方法
+    fun loadLyricFile(displayName: String): File {
+        return File(lyricDir, "$displayName.lrc")
     }
 }

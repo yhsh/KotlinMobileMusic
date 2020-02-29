@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:src="@drawable/animation_list" />
 
-    <cn.xiayiye5.kotlinmobilemusic.widget.LyricView
+    <cn.xiayiye5.kotlinmobilemusic.widget.LyricShowView
         android:id="@+id/lyricView"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />

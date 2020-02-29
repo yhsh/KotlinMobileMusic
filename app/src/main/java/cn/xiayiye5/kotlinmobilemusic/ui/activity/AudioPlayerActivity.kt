@@ -139,6 +139,8 @@ class AudioPlayerActivity : BaseActivity(), View.OnClickListener, SeekBar.OnSeek
      *  Async;当发送方法里面是什么线程，此命名就为异步线程，执行方法不是一个个
      */
     fun onEventMainThread(itemBean: AudioBean) {
+        //设置歌词名称
+        lyricView.setSongName(itemBean.display_name!!)
         audioBean = itemBean
         //更新歌曲名和歌手以及播放按钮
         audio_title.text = itemBean.display_name
@@ -156,7 +158,7 @@ class AudioPlayerActivity : BaseActivity(), View.OnClickListener, SeekBar.OnSeek
         val progress = AudioConnection.iservice?.getProgress()
         //更新时长进度
         updateProgress(progress)
-        handler.sendEmptyMessageDelayed(updateTime, 500)
+        handler.sendEmptyMessageDelayed(updateTime, 200)
     }
 
     /**
@@ -167,6 +169,10 @@ class AudioPlayerActivity : BaseActivity(), View.OnClickListener, SeekBar.OnSeek
             .append(StringUtils.parseProgress(duration))
         //更新进度条进度
         progress_sk.progress = songProgress ?: 0
+        //设置歌曲总时间
+        lyricView.setSongDuration(duration)
+        //更新歌词进度
+        lyricView.updateProgress(songProgress!!)
     }
 
     override fun onClick(v: View?) {

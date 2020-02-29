@@ -239,6 +239,10 @@ class AudioService : Service() {
             showNotification()
         }
 
+        /**
+         * 显示通知栏的方法
+         * 区分Android8.0( API26 )及以下版本
+         */
         private fun showNotification() {
             notificationManagerService =
                 this@AudioService.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
@@ -309,42 +313,6 @@ class AudioService : Service() {
                 PendingIntent.FLAG_UPDATE_CURRENT
             )
         }
-
-        /*private fun getPrePendingIntent(): PendingIntent? {
-            val intent = Intent(this@AudioService, AudioService::class.java)
-            intent.putExtra("key", fromPre)
-            val pendingIntentPre = PendingIntent.getService(
-                this@AudioService,
-                100,
-                intent,
-                PendingIntent.FLAG_UPDATE_CURRENT
-            )
-            return pendingIntentPre
-        }
-
-        private fun getStatePendingIntent(): PendingIntent? {
-            val intent = Intent(this@AudioService, AudioService::class.java)
-            intent.putExtra("key", fromState)
-            val pendingIntentState = PendingIntent.getService(
-                this@AudioService,
-                101,
-                intent,
-                PendingIntent.FLAG_UPDATE_CURRENT
-            )
-            return pendingIntentState
-        }
-
-        private fun getNextPendingIntent(): PendingIntent? {
-            val intent = Intent(this@AudioService, AudioService::class.java)
-            intent.putExtra("key", fromNext)
-            val pendingIntentNext = PendingIntent.getService(
-                this@AudioService,
-                102,
-                intent,
-                PendingIntent.FLAG_UPDATE_CURRENT
-            )
-            return pendingIntentNext
-        }*/
 
         fun notifyDataAndUi() {
             //通过EventBus发送消息
